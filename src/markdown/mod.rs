@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 use deunicode::deunicode;
 
 pub fn slugified_title(title: &str) -> String {
