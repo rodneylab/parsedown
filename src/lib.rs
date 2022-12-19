@@ -95,7 +95,7 @@ hello
         let result = markdown_to_html(markdown);
         assert_eq!(
             result,
-            r#"<h1>hello</h1>
+            r#"<h1 id="hello">hello</h1>
 <ul>
 <li>alpha</li>
 <li>beta</li>
