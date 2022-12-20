@@ -1,4 +1,26 @@
-use crate::markdown::slugified_title;
+use crate::markdown::{parse_markdown_to_html, slugified_title};
+
+#[test]
+fn test_parse_markdown_to_html() {
+    let markdown = r#"
+hello
+=====
+
+* alpha
+* beta
+"#;
+
+    let result = parse_markdown_to_html(markdown).ok();
+    let expected = Some(String::from(
+        r#"<h1 id="hello">hello</h1>
+<ul>
+<li>alpha</li>
+<li>beta</li>
+</ul>
+"#,
+    ));
+    assert_eq!(result, expected);
+}
 
 #[test]
 pub fn test_slugified_title() {
