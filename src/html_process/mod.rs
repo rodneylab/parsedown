@@ -1,3 +1,6 @@
+#[cfg(test)]
+mod tests;
+
 mod dom;
 
 use html5ever::{
@@ -14,6 +17,7 @@ use std::{
     mem,
     rc::Rc,
 };
+use url::Url;
 
 use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 
@@ -94,10 +98,17 @@ impl<'a> Builder<'a> {
         {
             if let Some(ref link_rel) = *link_rel {
                 if &*name.local == "a" {
-                    attrs.borrow_mut().push(Attribute {
-                        name: QualName::new(None, ns!(), local_name!("rel")),
-                        value: link_rel.clone(),
-                    })
+                    let mut attrs = attrs.borrow_mut();
+                    if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
+                        if !relative_url(&attr.value) {
+                            attrs.push(Attribute {
+                                name: QualName::new(None, ns!(), local_name!("rel")),
+                                value: link_rel.clone(),
+                            })
+                        }
+                    } else {
+                        // TODO: anchor tag has no href - can emit a warning
+                    };
                 }
             }
         }
@@ -186,6 +197,14 @@ impl Display for Document {
         String::from_utf8(ret_val)
             .expect("html5ever only supports UTF8")
             .fmt(f)
+    }
+}
+
+fn relative_url(url: &str) -> bool {
+    match Url::parse(url) {
+        Ok(_) => false,
+        Err(url::ParseError::RelativeUrlWithoutBase) => true,
+        Err(_) => false,
     }
 }
 

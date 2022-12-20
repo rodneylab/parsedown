@@ -52,5 +52,33 @@ hello
 </ul>
 "#
         );
+
+        let markdown = r#"
+## Subheading
+
+Paragraph text.
+"#;
+
+        let result = markdown_to_html(markdown);
+        assert_eq!(
+            result,
+            r##"<h2 id="subheading">Subheading <a href="#subheading" class="heading-anchor">#</a></h2>
+<p>Paragraph text.</p>
+"##
+        );
+
+        let markdown = r#"
+### Subheading
+
+Link: [Example site](https://example.com).
+"#;
+
+        let result = markdown_to_html(markdown);
+        assert_eq!(
+            result,
+            r##"<h3 id="subheading">Subheading</h3>
+<p>Link: <a href="https://example.com" rel="nofollow noopener noreferrer">Example site</a>.</p>
+"##
+        );
     }
 }
