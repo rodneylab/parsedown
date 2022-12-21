@@ -15,7 +15,6 @@ Light touch Markdown parsing into HTML written in Rust. Generates WASM and can b
 - adds pretty punctuation,
 - uses html5ever for HTML manipulation and pulldown-cmark for Markdown parsing.
 
-
 ## 🗺️ Roadmap
 
 - add word count and text readability statistics
