@@ -1,3 +1,13 @@
+## Unreleased
+
+### Feat
+
+- 🌟 return word count with html
+
+### Fix
+
+- **dependencies**: 💫 update crates
+
 ## 0.0.1 (2022-12-21)
 
 ### Feat
