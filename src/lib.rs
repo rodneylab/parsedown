@@ -2,8 +2,9 @@ mod html_process;
 mod markdown;
 
 use html_process::process_html;
-use markdown::parse_markdown_to_html;
-use wasm_bindgen::prelude::*;
+use markdown::{parse_markdown_to_html, TextStatistics};
+use serde::Serialize;
+use wasm_bindgen::{prelude::*, JsValue};
 
 #[wasm_bindgen]
 extern "C" {
@@ -17,13 +18,36 @@ macro_rules! console_log {
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
+#[derive(Debug, Serialize)]
+pub struct ParseResults {
+    html: Option<String>,
+    statistics: Option<TextStatistics>,
+    errors: Option<Vec<String>>,
+}
+
 #[wasm_bindgen]
-pub fn markdown_to_html(markdown: &str) -> String {
+pub fn markdown_to_html(markdown: &str) -> JsValue {
     match parse_markdown_to_html(markdown) {
-        Ok(value) => process_html(&value),
+        Ok((html_value, statistics_value)) => {
+            let html = Some(process_html(&html_value));
+            let statistics = Some(statistics_value);
+            let results = ParseResults {
+                html,
+                statistics,
+                errors: None,
+            };
+            serde_wasm_bindgen::to_value(&results).unwrap()
+        }
         Err(error) => {
             console_log!("Error parsing markdown: {error}");
-            String::from("")
+            let mut errors: Vec<String> = Vec::new();
+            errors.push(format!("Error parsing markdown: {error}"));
+            let results = ParseResults {
+                html: None,
+                statistics: None,
+                errors: Some(errors),
+            };
+            serde_wasm_bindgen::to_value(&results).unwrap()
         }
     }
 }

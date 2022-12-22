@@ -1,4 +1,19 @@
-use crate::markdown::{parse_markdown_to_html, slugified_title};
+use crate::markdown::{parse_markdown_to_html, slugified_title, words};
+
+#[test]
+fn test_words() {
+    let text = "hello";
+    assert_eq!(words(text), 1);
+
+    let text = "half-time";
+    assert_eq!(words(text), 1);
+
+    let text = "";
+    assert_eq!(words(text), 0);
+
+    let text = "A complete sentence. ";
+    assert_eq!(words(text), 3);
+}
 
 #[test]
 fn test_parse_markdown_to_html() {
@@ -10,15 +25,19 @@ hello
 * beta
 "#;
 
-    let result = parse_markdown_to_html(markdown).ok();
-    let expected = Some(String::from(
+    let result = if let Some((result, _)) = parse_markdown_to_html(markdown).ok() {
+        result
+    } else {
+        panic!("Result expected");
+    };
+    let expected = String::from(
         r#"<h1 id="hello">hello</h1>
 <ul>
 <li>alpha</li>
 <li>beta</li>
 </ul>
 "#,
-    ));
+    );
     assert_eq!(result, expected);
 }
 

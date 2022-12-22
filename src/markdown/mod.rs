@@ -3,7 +3,12 @@ mod tests;
 
 use deunicode::deunicode;
 use pulldown_cmark::{html, Event, Options, Parser, Tag};
+use serde::Serialize;
 use std::io::{Cursor, Error};
+
+fn words(text: &str) -> u64 {
+    text.split_whitespace().count().try_into().unwrap()
+}
 
 fn slugified_title(title: &str) -> String {
     let deunicoded_title = deunicode(title);
@@ -25,7 +30,12 @@ fn slugified_title(title: &str) -> String {
     result
 }
 
-pub fn parse_markdown_to_html(markdown: &str) -> Result<String, Error> {
+#[derive(Debug, PartialEq, Serialize)]
+pub struct TextStatistics {
+    word_count: u64,
+}
+
+pub fn parse_markdown_to_html(markdown: &str) -> Result<(String, TextStatistics), Error> {
     let mut bytes = Vec::new();
     let mut options = Options::empty();
     options.insert(Options::ENABLE_SMART_PUNCTUATION);
@@ -33,13 +43,20 @@ pub fn parse_markdown_to_html(markdown: &str) -> Result<String, Error> {
     let mut heading_identifiers: Vec<String> = Vec::new();
     let mut current_id_fragments = String::new();
     let mut parsing_heading = false;
+    let mut word_count: u64 = 0;
 
     let heading_parser = Parser::new_ext(markdown, options).map(|event| {
         match &event {
             Event::Start(Tag::Heading(_level, _identifier, _classes)) => {
                 parsing_heading = true;
             }
-            Event::Code(value) | Event::Text(value) => {
+            Event::Text(value) => {
+                word_count += words(value);
+                if parsing_heading {
+                    current_id_fragments.push_str(value);
+                }
+            }
+            Event::Code(value) => {
                 if parsing_heading {
                     current_id_fragments.push_str(value);
                 }
@@ -55,6 +72,7 @@ pub fn parse_markdown_to_html(markdown: &str) -> Result<String, Error> {
         event
     });
     html::write_html(Cursor::new(&mut bytes), heading_parser)?;
+    let statistics = TextStatistics { word_count };
 
     let mut heading_identifiers_iterator = heading_identifiers.iter();
     let parser = Parser::new_ext(markdown, options).map(|event| match &event {
@@ -70,7 +88,7 @@ pub fn parse_markdown_to_html(markdown: &str) -> Result<String, Error> {
     });
 
     match html::write_html(Cursor::new(&mut bytes), parser) {
-        Ok(_) => Ok(String::from_utf8_lossy(&bytes).to_string()),
+        Ok(_) => Ok((String::from_utf8_lossy(&bytes).to_string(), statistics)),
         Err(error) => Err(error),
     }
 }
