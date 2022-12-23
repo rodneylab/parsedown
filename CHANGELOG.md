@@ -2,11 +2,18 @@
 
 ### Feat
 
+- 🌟 add estimated reading time
 - 🌟 return word count with html
 
 ### Fix
 
+- 💫 refine word count
+- 💫 refine word count
 - **dependencies**: 💫 update crates
+
+### Refactor
+
+- 🏄🏽 restructure to assist unit testing
 
 ## 0.0.1 (2022-12-21)
 
