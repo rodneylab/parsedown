@@ -6,13 +6,14 @@ use pulldown_cmark::{html, Event, Options, Parser, Tag};
 use serde::Serialize;
 use std::io::{Cursor, Error};
 
+/// Emoji are not included in word count and hyphenated, compound words (half-time) are one word
 fn words(text: &str) -> u64 {
-    // u64 should always be large enough to hold the result
-    let word_vector: Vec<&str> = text.split_whitespace().collect();
+    let word_vector: Vec<&str> = text.split(|c| char::is_whitespace(c) || c == '/').collect();
+    let ampersand = &"&";
 
-    // only count as a word if there is at least one alphanumeric character
+    // only count as a word if there is at least one alphanumeric character or is &
     word_vector.iter().fold(0, |acc, x| {
-        if x.find(char::is_alphanumeric).is_some() {
+        if x.find(char::is_alphanumeric).is_some() || x == ampersand {
             acc + 1
         } else {
             acc

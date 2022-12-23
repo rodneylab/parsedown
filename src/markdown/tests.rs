@@ -16,6 +16,12 @@ fn test_words() {
 
     let text = "Resources - writing";
     assert_eq!(words(text), 2);
+
+    let text = "He/she/they";
+    assert_eq!(words(text), 3);
+
+    let text = "Acme & co.";
+    assert_eq!(words(text), 3);
 }
 
 #[test]
