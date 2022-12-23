@@ -11,7 +11,7 @@ fn words(text: &str) -> u64 {
     text.split(|c| char::is_whitespace(c) || c == '/')
         .fold(0, |acc, x| {
             // only count as a word if there is at least one alphanumeric character or is &
-            if x.find(char::is_alphanumeric).is_some() || x == "&" {
+            if x.contains(char::is_alphanumeric) || x == "&" {
                 acc + 1
             } else {
                 acc
