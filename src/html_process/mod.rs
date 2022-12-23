@@ -129,7 +129,6 @@ impl<'a> Builder<'a> {
                     return;
                 };
 
-                let mut new_node_attrs: Vec<Attribute> = Vec::new();
                 let new_node_attr = Attribute {
                     name: QualName::new(None, ns!(), "href".into()),
                     value: format!("#{href}").into(),
@@ -138,8 +137,7 @@ impl<'a> Builder<'a> {
                     name: QualName::new(None, ns!(), "class".into()),
                     value: "heading-anchor".into(),
                 };
-                new_node_attrs.push(new_node_attr);
-                new_node_attrs.push(new_node_class);
+                let new_node_attrs = vec![new_node_attr, new_node_class];
                 let new_node_text = Node::new(NodeData::Text {
                     contents: RefCell::new("#".into()),
                 });

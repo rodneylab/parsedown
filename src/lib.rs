@@ -37,9 +37,8 @@ fn markdown_to_processed_html(markdown: &str) -> ParseResults {
             }
         }
         Err(error) => {
-            console_log!("Error parsing markdown: {error}");
-            let mut errors: Vec<String> = Vec::new();
-            errors.push(format!("Error parsing markdown: {error}"));
+            let message = format!("Error parsing markdown: {error}");
+            let errors = vec![message];
             ParseResults {
                 html: None,
                 statistics: None,
