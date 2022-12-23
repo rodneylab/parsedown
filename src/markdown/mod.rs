@@ -45,6 +45,13 @@ pub struct TextStatistics {
     word_count: u64,
 }
 
+impl TextStatistics {
+    #[allow(dead_code)]
+    pub fn new(word_count: u64) -> TextStatistics {
+        TextStatistics { word_count }
+    }
+}
+
 pub fn parse_markdown_to_html(markdown: &str) -> Result<(String, TextStatistics), Error> {
     let mut bytes = Vec::new();
     let mut options = Options::empty();

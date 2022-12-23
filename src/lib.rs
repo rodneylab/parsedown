@@ -18,38 +18,41 @@ macro_rules! console_log {
     ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
 }
 
-#[derive(Debug, Serialize)]
+#[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct ParseResults {
     html: Option<String>,
     statistics: Option<TextStatistics>,
     errors: Option<Vec<String>>,
 }
 
-#[wasm_bindgen]
-pub fn markdown_to_html(markdown: &str) -> JsValue {
+fn markdown_to_processed_html(markdown: &str) -> ParseResults {
     match parse_markdown_to_html(markdown) {
         Ok((html_value, statistics_value)) => {
             let html = Some(process_html(&html_value));
             let statistics = Some(statistics_value);
-            let results = ParseResults {
+            ParseResults {
                 html,
                 statistics,
                 errors: None,
-            };
-            serde_wasm_bindgen::to_value(&results).unwrap()
+            }
         }
         Err(error) => {
             console_log!("Error parsing markdown: {error}");
             let mut errors: Vec<String> = Vec::new();
             errors.push(format!("Error parsing markdown: {error}"));
-            let results = ParseResults {
+            ParseResults {
                 html: None,
                 statistics: None,
                 errors: Some(errors),
-            };
-            serde_wasm_bindgen::to_value(&results).unwrap()
+            }
         }
     }
+}
+
+#[wasm_bindgen]
+pub fn markdown_to_html(markdown: &str) -> JsValue {
+    let results = markdown_to_processed_html(markdown);
+    serde_wasm_bindgen::to_value(&results).unwrap()
 }
 
 #[wasm_bindgen]
@@ -85,14 +88,23 @@ hello
 * beta
 "#;
 
-        let result = markdown_to_html(markdown);
-        let expected = r#"<h1 id="hello">hello</h1>
+        let result = markdown_to_processed_html(markdown);
+        let html = Some(String::from(
+            r#"<h1 id="hello">hello</h1>
 <ul>
 <li>alpha</li>
 <li>beta</li>
 </ul>
-"#;
-        assert_eq!(result, expected);
+"#,
+        ));
+        assert_eq!(
+            result,
+            ParseResults {
+                html,
+                statistics: Some(TextStatistics::new(3)),
+                errors: None
+            }
+        );
 
         let markdown = r#"
 ## Subheading
@@ -100,11 +112,20 @@ hello
 Paragraph text.
 "#;
 
-        let result = markdown_to_html(markdown);
-        let expected = r##"<h2 id="subheading">Subheading <a href="#subheading" class="heading-anchor">#</a></h2>
+        let result = markdown_to_processed_html(markdown);
+        let html = Some(String::from(
+            r##"<h2 id="subheading">Subheading <a href="#subheading" class="heading-anchor">#</a></h2>
 <p>Paragraph text.</p>
-"##;
-        assert_eq!(result, expected);
+"##,
+        ));
+        assert_eq!(
+            result,
+            ParseResults {
+                html,
+                statistics: Some(TextStatistics::new(3)),
+                errors: None
+            }
+        );
 
         let markdown = r#"
 ### Subheading
@@ -112,11 +133,20 @@ Paragraph text.
 Link: [Example site](https://example.com).
 "#;
 
-        let result = markdown_to_html(markdown);
-        let expected = r##"<h3 id="subheading">Subheading</h3>
+        let result = markdown_to_processed_html(markdown);
+        let html = Some(String::from(
+            r##"<h3 id="subheading">Subheading</h3>
 <p>Link: <a href="https://example.com" rel="nofollow noopener noreferrer">Example site</a>.</p>
-"##;
-        assert_eq!(result, expected);
+"##,
+        ));
+        assert_eq!(
+            result,
+            ParseResults {
+                html,
+                statistics: Some(TextStatistics::new(4)),
+                errors: None
+            }
+        );
     }
 
     #[test]
