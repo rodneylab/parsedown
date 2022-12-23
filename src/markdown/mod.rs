@@ -7,7 +7,17 @@ use serde::Serialize;
 use std::io::{Cursor, Error};
 
 fn words(text: &str) -> u64 {
-    text.split_whitespace().count().try_into().unwrap()
+    // u64 should always be large enough to hold the result
+    let word_vector: Vec<&str> = text.split_whitespace().collect();
+
+    // only count as a word if there is at least one alphanumeric character
+    word_vector.iter().fold(0, |acc, x| {
+        if x.find(char::is_alphanumeric).is_some() {
+            acc + 1
+        } else {
+            acc
+        }
+    })
 }
 
 fn slugified_title(title: &str) -> String {
@@ -30,7 +40,7 @@ fn slugified_title(title: &str) -> String {
     result
 }
 
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct TextStatistics {
     word_count: u64,
 }

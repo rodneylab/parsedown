@@ -13,6 +13,9 @@ fn test_words() {
 
     let text = "A complete sentence. ";
     assert_eq!(words(text), 3);
+
+    let text = "Resources - writing";
+    assert_eq!(words(text), 2);
 }
 
 #[test]
