@@ -6,8 +6,18 @@ use pulldown_cmark::{html, Event, Options, Parser, Tag};
 use serde::Serialize;
 use std::io::{Cursor, Error};
 
+/// Reading time in minutes from number of words, assumes 180 wpm reading speed from a device
+fn reading_time_from_words(words: u32) -> u32 {
+    let result = (words as f64 / 180.0).round();
+    if result > 0.0 {
+        result as u32
+    } else {
+        1
+    }
+}
+
 /// Emoji are not included in word count and hyphenated, compound words (half-time) are one word
-fn words(text: &str) -> u64 {
+fn words(text: &str) -> u32 {
     text.split(|c| char::is_whitespace(c) || c == '/')
         .fold(0, |acc, x| {
             // only count as a word if there is at least one alphanumeric character or is &
@@ -41,13 +51,18 @@ fn slugified_title(title: &str) -> String {
 
 #[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct TextStatistics {
-    word_count: u64,
+    reading_time: u32,
+    word_count: u32,
 }
 
 impl TextStatistics {
     #[allow(dead_code)]
-    pub fn new(word_count: u64) -> TextStatistics {
-        TextStatistics { word_count }
+    pub fn new(word_count: u32) -> TextStatistics {
+        let reading_time = reading_time_from_words(word_count);
+        TextStatistics {
+            reading_time,
+            word_count,
+        }
     }
 }
 
@@ -59,7 +74,7 @@ pub fn parse_markdown_to_html(markdown: &str) -> Result<(String, TextStatistics)
     let mut heading_identifiers: Vec<String> = Vec::new();
     let mut current_id_fragments = String::new();
     let mut parsing_heading = false;
-    let mut word_count: u64 = 0;
+    let mut word_count: u32 = 0;
 
     let heading_parser = Parser::new_ext(markdown, options).map(|event| {
         match &event {
@@ -88,7 +103,11 @@ pub fn parse_markdown_to_html(markdown: &str) -> Result<(String, TextStatistics)
         event
     });
     html::write_html(Cursor::new(&mut bytes), heading_parser)?;
-    let statistics = TextStatistics { word_count };
+    let reading_time = reading_time_from_words(word_count);
+    let statistics = TextStatistics {
+        reading_time,
+        word_count,
+    };
 
     let mut heading_identifiers_iterator = heading_identifiers.iter();
     let parser = Parser::new_ext(markdown, options).map(|event| match &event {

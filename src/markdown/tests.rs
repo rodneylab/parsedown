@@ -1,4 +1,14 @@
-use crate::markdown::{parse_markdown_to_html, slugified_title, words};
+use crate::markdown::{parse_markdown_to_html, reading_time_from_words, slugified_title, words};
+
+#[test]
+fn test_reading_time_from_words() {
+    assert_eq!(reading_time_from_words(179), 1);
+    assert_eq!(reading_time_from_words(0), 1);
+    assert_eq!(reading_time_from_words(180), 1);
+    assert_eq!(reading_time_from_words(181), 1);
+    assert_eq!(reading_time_from_words(269), 1);
+    assert_eq!(reading_time_from_words(270), 2);
+}
 
 #[test]
 fn test_words() {
