@@ -3,12 +3,11 @@ use crate::html_process::{process_html, relative_url};
 #[test]
 fn test_process_html() {
     let result = process_html("<a href=\"https://example.com\">Example</a>");
-    let expected =
-        "<a href=\"https://example.com\" rel=\"nofollow noopener noreferrer\">Example</a>";
+    let expected = r#"<a href="https://example.com" target="_blank" rel="nofollow noopener noreferrer">Example</a>"#;
     assert_eq!(result, expected);
 
     let result = process_html("<a href=\"/pathname?utm=123#anchor\">Example</a>");
-    let expected = "<a href=\"/pathname?utm=123#anchor\">Example</a>";
+    let expected = r#"<a href="/pathname?utm=123#anchor">Example</a>"#;
     assert_eq!(result, expected);
 
     let result = process_html("<h2>Heading</h2>");

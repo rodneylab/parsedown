@@ -135,7 +135,7 @@ Link: [Example site](https://example.com).
         let result = markdown_to_processed_html(markdown);
         let html = Some(String::from(
             r##"<h3 id="subheading">Subheading</h3>
-<p>Link: <a href="https://example.com" rel="nofollow noopener noreferrer">Example site</a>.</p>
+<p>Link: <a href="https://example.com" target="_blank" rel="nofollow noopener noreferrer">Example site</a>.</p>
 "##,
         ));
         assert_eq!(

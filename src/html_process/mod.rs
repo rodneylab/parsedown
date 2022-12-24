@@ -24,12 +24,14 @@ use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 #[derive(Debug)]
 pub struct Builder<'a> {
     link_rel: Option<&'a str>,
+    link_target: Option<&'a str>,
 }
 
 impl<'a> Default for Builder<'a> {
     fn default() -> Self {
         Builder {
             link_rel: Some("noopener noreferrer"),
+            link_target: Some("_blank"),
         }
     }
 }
@@ -51,6 +53,9 @@ impl<'a> Builder<'a> {
     pub fn process_dom(&self, mut dom: RcDom) -> Document {
         let mut stack = Vec::new();
         let link_rel = self.link_rel.map(|link_rel| format_tendril!("{link_rel}"));
+        let link_target = self
+            .link_target
+            .map(|link_target| format_tendril!("{link_target}"));
         let body = {
             let children = dom.document.children.borrow();
             children[0].clone()
@@ -66,7 +71,7 @@ impl<'a> Builder<'a> {
                 .upgrade().expect("a node's parent will be pointed to by its parent (or the root pointer), and will not be dropped");
             let pass_process = self.process_child(&mut node);
             if pass_process {
-                self.adjust_node_attributes(&mut node, &link_rel);
+                self.adjust_node_attributes(&mut node, &link_rel, &link_target);
                 self.adjust_node_children(&mut node, &mut dom);
                 dom.append(&parent.clone(), NodeOrText::AppendNode(node.clone()));
             } else {
@@ -89,28 +94,58 @@ impl<'a> Builder<'a> {
         self.process_dom(dom)
     }
 
-    fn adjust_node_attributes(&self, child: &mut Handle, link_rel: &Option<StrTendril>) {
+    fn adjust_node_attributes(
+        &self,
+        child: &mut Handle,
+        link_rel: &Option<StrTendril>,
+        link_target: &Option<StrTendril>,
+    ) {
         if let NodeData::Element {
             ref name,
             ref attrs,
             ..
         } = child.data
         {
-            if let Some(ref link_rel) = *link_rel {
-                if &*name.local == "a" {
-                    let mut attrs = attrs.borrow_mut();
-                    if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
-                        if !relative_url(&attr.value) {
+            //             if let Some(ref link_rel) = *link_rel {
+            //                 if &*name.local == "a" {
+            //                     let mut attrs = attrs.borrow_mut();
+            //                     if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
+            //                         if !relative_url(&attr.value) {
+            //                             attrs.push(Attribute {
+            //                                 name: QualName::new(None, ns!(), local_name!("target")),
+            //                                 value: link_target.clone(),
+            //                             });
+            //                             attrs.push(Attribute {
+            //                                 name: QualName::new(None, ns!(), local_name!("rel")),
+            //                                 value: link_rel.clone(),
+            //                             })
+            //                         }
+            //                     } else {
+            //                         // TODO: anchor tag has no href - can emit a warning
+            //                     };
+            //                 }
+            //             }
+            if &*name.local == "a" {
+                let mut attrs = attrs.borrow_mut();
+                if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
+                    if !relative_url(&attr.value) {
+                        if let Some(ref link_target) = *link_target {
+                            attrs.push(Attribute {
+                                name: QualName::new(None, ns!(), local_name!("target")),
+                                value: link_target.clone(),
+                            });
+                        }
+                        if let Some(ref link_rel) = *link_rel {
                             attrs.push(Attribute {
                                 name: QualName::new(None, ns!(), local_name!("rel")),
                                 value: link_rel.clone(),
                             })
                         }
-                    } else {
-                        // TODO: anchor tag has no href - can emit a warning
-                    };
+                    }
                 }
-            }
+            } else {
+                // TODO: anchor tag has no href - can emit a warning
+            };
         }
     }
 
