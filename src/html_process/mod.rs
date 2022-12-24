@@ -106,25 +106,6 @@ impl<'a> Builder<'a> {
             ..
         } = child.data
         {
-            //             if let Some(ref link_rel) = *link_rel {
-            //                 if &*name.local == "a" {
-            //                     let mut attrs = attrs.borrow_mut();
-            //                     if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
-            //                         if !relative_url(&attr.value) {
-            //                             attrs.push(Attribute {
-            //                                 name: QualName::new(None, ns!(), local_name!("target")),
-            //                                 value: link_target.clone(),
-            //                             });
-            //                             attrs.push(Attribute {
-            //                                 name: QualName::new(None, ns!(), local_name!("rel")),
-            //                                 value: link_rel.clone(),
-            //                             })
-            //                         }
-            //                     } else {
-            //                         // TODO: anchor tag has no href - can emit a warning
-            //                     };
-            //                 }
-            //             }
             if &*name.local == "a" {
                 let mut attrs = attrs.borrow_mut();
                 if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
