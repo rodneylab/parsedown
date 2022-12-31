@@ -1,4 +1,7 @@
-use crate::markdown::{parse_markdown_to_html, reading_time_from_words, slugified_title, words};
+use crate::markdown::{
+    parse_markdown_to_html, parse_markdown_to_plaintext, reading_time_from_words, slugified_title,
+    words,
+};
 
 #[test]
 fn test_reading_time_from_words() {
@@ -57,6 +60,41 @@ hello
 </ul>
 "#,
     );
+    assert_eq!(result, expected);
+}
+
+#[test]
+fn test_parse_markdown_to_plaintext() {
+    let markdown = "## 🧑🏽‍🍳 Pick of the Month — vanilla-extract";
+
+    let result = parse_markdown_to_plaintext(markdown);
+    let expected = String::from("🧑🏽\u{200d}🍳 Pick of the Month — vanilla-extract\n");
+    assert_eq!(result, expected);
+
+    let markdown = r#"
+testing, testing one, two, three, four, five, six, seven, eight, nine,  ten, eleven
+"#;
+
+    let result = parse_markdown_to_plaintext(markdown);
+    let expected = String::from(
+        "testing, testing one, two, three, four, five, six, seven, eight, nine,\nten, eleven\n",
+    );
+    assert_eq!(result, expected);
+
+    let markdown = r#"
+hello
+=====
+
+It's me
+
+* alpha
+* beta
+"#;
+
+    let markdown =
+        r#"<abbr>CLI<tool-tip inert role="tooltip">Command Line Interface</tool-tip></abbr>"#;
+    let result = parse_markdown_to_plaintext(markdown);
+    let expected = String::from("CLI\n");
     assert_eq!(result, expected);
 }
 

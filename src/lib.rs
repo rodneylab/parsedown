@@ -2,7 +2,7 @@ mod html_process;
 mod markdown;
 
 use html_process::process_html;
-use markdown::{parse_markdown_to_html, TextStatistics};
+use markdown::{parse_markdown_to_html, parse_markdown_to_plaintext, TextStatistics};
 use serde::Serialize;
 use wasm_bindgen::{prelude::*, JsValue};
 
@@ -52,6 +52,11 @@ fn markdown_to_processed_html(markdown: &str) -> ParseResults {
 pub fn markdown_to_html(markdown: &str) -> JsValue {
     let results = markdown_to_processed_html(markdown);
     serde_wasm_bindgen::to_value(&results).unwrap()
+}
+
+#[wasm_bindgen]
+pub fn markdown_to_plaintext(markdown: &str) -> String {
+    parse_markdown_to_plaintext(markdown)
 }
 
 #[wasm_bindgen]
