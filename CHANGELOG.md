@@ -1,7 +1,8 @@
-## 1.1.0 (2022-12-31)
+## 1.2.0 (2022-12-31)
 
 ### Feat
 
+- 🌟 output an array of headings each with its id
 - 🌟 add Markdown parsing to hard wrapped lines of plaintext
 
 ### Fix
