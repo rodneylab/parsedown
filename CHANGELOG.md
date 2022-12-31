@@ -1,3 +1,13 @@
+## Unreleased
+
+### Feat
+
+- 🌟 add Markdown parsing to hard wrapped lines of plaintext
+
+### Fix
+
+- 💫 add target blank to non relative anchor tags
+
 ## 1.0.0 (2022-12-23)
 
 ### Feat
