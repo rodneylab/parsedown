@@ -47,11 +47,12 @@ hello
 * beta
 "#;
 
-    let result = if let Some((result, _)) = parse_markdown_to_html(markdown).ok() {
-        result
-    } else {
-        panic!("Result expected");
-    };
+    let result =
+        if let Some((result, _headings, _statistics)) = parse_markdown_to_html(markdown).ok() {
+            result
+        } else {
+            panic!("Result expected");
+        };
     let expected = String::from(
         r#"<h1 id="hello">hello</h1>
 <ul>
@@ -80,16 +81,6 @@ testing, testing one, two, three, four, five, six, seven, eight, nine,  ten, ele
         "testing, testing one, two, three, four, five, six, seven, eight, nine,\nten, eleven\n",
     );
     assert_eq!(result, expected);
-
-    let markdown = r#"
-hello
-=====
-
-It's me
-
-* alpha
-* beta
-"#;
 
     let markdown =
         r#"<abbr>CLI<tool-tip inert role="tooltip">Command Line Interface</tool-tip></abbr>"#;

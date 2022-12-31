@@ -2,7 +2,7 @@ mod html_process;
 mod markdown;
 
 use html_process::process_html;
-use markdown::{parse_markdown_to_html, parse_markdown_to_plaintext, TextStatistics};
+use markdown::{parse_markdown_to_html, parse_markdown_to_plaintext, Heading, TextStatistics};
 use serde::Serialize;
 use wasm_bindgen::{prelude::*, JsValue};
 
@@ -21,17 +21,20 @@ macro_rules! console_log {
 #[derive(Debug, Eq, PartialEq, Serialize)]
 pub struct ParseResults {
     html: Option<String>,
+    headings: Option<Vec<Heading>>,
     statistics: Option<TextStatistics>,
     errors: Option<Vec<String>>,
 }
 
 fn markdown_to_processed_html(markdown: &str) -> ParseResults {
     match parse_markdown_to_html(markdown) {
-        Ok((html_value, statistics_value)) => {
+        Ok((html_value, headings, statistics_value)) => {
             let html = Some(process_html(&html_value));
+            let headings = Some(headings);
             let statistics = Some(statistics_value);
             ParseResults {
                 html,
+                headings,
                 statistics,
                 errors: None,
             }
@@ -41,6 +44,7 @@ fn markdown_to_processed_html(markdown: &str) -> ParseResults {
             let errors = vec![message];
             ParseResults {
                 html: None,
+                headings: None,
                 statistics: None,
                 errors: Some(errors),
             }
@@ -85,8 +89,8 @@ mod tests {
     #[test]
     fn test_markdown_to_html() {
         let markdown = r#"
-hello
-=====
+hello you
+=========
 
 * alpha
 * beta
@@ -94,7 +98,7 @@ hello
 
         let result = markdown_to_processed_html(markdown);
         let html = Some(String::from(
-            r#"<h1 id="hello">hello</h1>
+            r#"<h1 id="hello-you">hello you</h1>
 <ul>
 <li>alpha</li>
 <li>beta</li>
@@ -105,7 +109,8 @@ hello
             result,
             ParseResults {
                 html,
-                statistics: Some(TextStatistics::new(3)),
+                headings: Some(vec![Heading::new("hello you", "hello-you")]),
+                statistics: Some(TextStatistics::new(4)),
                 errors: None
             }
         );
@@ -126,9 +131,10 @@ Paragraph text.
             result,
             ParseResults {
                 html,
+                headings: Some(vec![Heading::new("Subheading", "subheading")]),
                 statistics: Some(TextStatistics::new(3)),
                 errors: None
-            }
+            },
         );
 
         let markdown = r#"
@@ -147,6 +153,7 @@ Link: [Example site](https://example.com).
             result,
             ParseResults {
                 html,
+                headings: Some(vec![Heading::new("Subheading", "subheading")]),
                 statistics: Some(TextStatistics::new(4)),
                 errors: None
             }

@@ -80,12 +80,33 @@ impl TextStatistics {
     }
 }
 
-pub fn parse_markdown_to_html(markdown: &str) -> io::Result<(String, TextStatistics)> {
+#[derive(Debug, Eq, PartialEq, Serialize)]
+pub struct Heading {
+    heading: String,
+    id: String,
+}
+
+impl Heading {
+    pub fn new(heading: &str, id: &str) -> Heading {
+        Heading {
+            heading: heading.into(),
+            id: id.into(),
+        }
+    }
+
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+}
+
+pub fn parse_markdown_to_html(
+    markdown: &str,
+) -> io::Result<(String, Vec<Heading>, TextStatistics)> {
     let mut bytes = Vec::new();
     let mut options = Options::empty();
     options.insert(Options::ENABLE_SMART_PUNCTUATION);
 
-    let mut heading_identifiers: Vec<String> = Vec::new();
+    let mut headings: Vec<Heading> = Vec::new();
     let mut current_id_fragments = String::new();
     let mut parsing_heading = false;
     let mut word_count: u32 = 0;
@@ -107,8 +128,9 @@ pub fn parse_markdown_to_html(markdown: &str) -> io::Result<(String, TextStatist
                 }
             }
             Event::End(Tag::Heading(_level, _identifier, _classes)) => {
-                let slugified_title_value = slugified_title(&current_id_fragments);
-                heading_identifiers.push(slugified_title_value);
+                let heading = &current_id_fragments;
+                let id = slugified_title(&current_id_fragments);
+                headings.push(Heading::new(heading, &id));
                 current_id_fragments = String::new();
                 parsing_heading = false;
             }
@@ -123,13 +145,25 @@ pub fn parse_markdown_to_html(markdown: &str) -> io::Result<(String, TextStatist
         word_count,
     };
 
-    let mut heading_identifiers_iterator = heading_identifiers.iter();
+    //     let mut heading_identifiers_iterator = heading_identifiers.iter();
+    //     let parser = Parser::new_ext(markdown, options).map(|event| match &event {
+    //         Event::Start(Tag::Heading(level, _identifiers, _classes)) => {
+    //             let heading_identifier = heading_identifiers_iterator.next();
+    //             Event::Start(Tag::Heading(
+    //                 *level,
+    //                 heading_identifier.map(|x| &**x),
+    //                 Vec::new(),
+    //             ))
+    //         }
+    //         _ => event,
+    //     });
+    let mut heading_iterator = headings.iter();
     let parser = Parser::new_ext(markdown, options).map(|event| match &event {
         Event::Start(Tag::Heading(level, _identifiers, _classes)) => {
-            let heading_identifier = heading_identifiers_iterator.next();
+            let heading_identifier = heading_iterator.next();
             Event::Start(Tag::Heading(
                 *level,
-                heading_identifier.map(|x| &**x),
+                heading_identifier.map(|x| x.id()),
                 Vec::new(),
             ))
         }
@@ -137,7 +171,11 @@ pub fn parse_markdown_to_html(markdown: &str) -> io::Result<(String, TextStatist
     });
 
     match html::write_html(Cursor::new(&mut bytes), parser) {
-        Ok(_) => Ok((String::from_utf8_lossy(&bytes).to_string(), statistics)),
+        Ok(_) => Ok((
+            String::from_utf8_lossy(&bytes).to_string(),
+            headings,
+            statistics,
+        )),
         Err(error) => Err(error),
     }
 }
