@@ -1,4 +1,4 @@
-## 1.2.0 (2022-12-31)
+## 1.2.1 (2023-01-03)
 
 ### Feat
 
@@ -7,6 +7,7 @@
 
 ### Fix
 
+- accept input canonical base url parameters to allow converion of relative URLs to absolute ones
 - 💫 add target blank to non relative anchor tags
 
 ## 1.0.0 (2022-12-23)
