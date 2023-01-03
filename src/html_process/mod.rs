@@ -2,7 +2,8 @@
 mod tests;
 
 mod dom;
-
+use crate::url_utility::relative_url;
+use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 use html5ever::{
     driver,
     interface::tree_builder::{AppendNode, NodeOrText, TreeSink},
@@ -17,12 +18,10 @@ use std::{
     mem,
     rc::Rc,
 };
-use url::Url;
-
-use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 
 #[derive(Debug)]
 pub struct Builder<'a> {
+    canonical_root_url: Option<&'a str>,
     link_rel: Option<&'a str>,
     link_target: Option<&'a str>,
 }
@@ -30,6 +29,7 @@ pub struct Builder<'a> {
 impl<'a> Default for Builder<'a> {
     fn default() -> Self {
         Builder {
+            canonical_root_url: None,
             link_rel: Some("noopener noreferrer"),
             link_target: Some("_blank"),
         }
@@ -39,6 +39,11 @@ impl<'a> Default for Builder<'a> {
 impl<'a> Builder<'a> {
     pub fn new() -> Self {
         Self::default()
+    }
+
+    pub fn canonical_root_url(&mut self, value: Option<&'a str>) -> &mut Self {
+        self.canonical_root_url = value;
+        self
     }
 
     pub fn link_rel(&mut self, value: Option<&'a str>) -> &mut Self {
@@ -108,8 +113,13 @@ impl<'a> Builder<'a> {
         {
             if &*name.local == "a" {
                 let mut attrs = attrs.borrow_mut();
-                if let Some(attr) = attrs.iter().find(|attr| &*attr.name.local == "href") {
-                    if !relative_url(&attr.value) {
+                if let Some(attr) = attrs.iter_mut().find(|attr| &*attr.name.local == "href") {
+                    if relative_url(&attr.value) {
+                        if let Some(root_url_value) = self.canonical_root_url {
+                            let pathname = &*attr.value;
+                            attr.value = format!("{root_url_value}{pathname}").into();
+                        }
+                    } else {
                         if let Some(ref link_target) = *link_target {
                             attrs.push(Attribute {
                                 name: QualName::new(None, ns!(), local_name!("target")),
@@ -214,17 +224,10 @@ impl Display for Document {
     }
 }
 
-fn relative_url(url: &str) -> bool {
-    match Url::parse(url) {
-        Ok(_) => false,
-        Err(url::ParseError::RelativeUrlWithoutBase) => true,
-        Err(_) => false,
-    }
-}
-
-pub fn process_html(html: &str) -> String {
+pub fn process_html(html: &str, canonical_root_url: Option<&str>) -> String {
     Builder::new()
         .link_rel(Some("nofollow noopener noreferrer"))
+        .canonical_root_url(canonical_root_url)
         .process(html)
         .to_string()
 }

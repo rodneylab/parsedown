@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod tests;
 
+use crate::url_utility::relative_url;
+
 use deunicode::deunicode;
 use nom::{
     self,
@@ -145,18 +147,6 @@ pub fn parse_markdown_to_html(
         word_count,
     };
 
-    //     let mut heading_identifiers_iterator = heading_identifiers.iter();
-    //     let parser = Parser::new_ext(markdown, options).map(|event| match &event {
-    //         Event::Start(Tag::Heading(level, _identifiers, _classes)) => {
-    //             let heading_identifier = heading_identifiers_iterator.next();
-    //             Event::Start(Tag::Heading(
-    //                 *level,
-    //                 heading_identifier.map(|x| &**x),
-    //                 Vec::new(),
-    //             ))
-    //         }
-    //         _ => event,
-    //     });
     let mut heading_iterator = headings.iter();
     let parser = Parser::new_ext(markdown, options).map(|event| match &event {
         Event::Start(Tag::Heading(level, _identifiers, _classes)) => {
@@ -253,6 +243,9 @@ struct PlaintextWriter<'a, I, W> {
 
     /// HTML tags to ignore in ouput
     ignore_tags: Vec<&'a str>,
+
+    /// Optionally prepended to relative URLs
+    canonical_root_url: Option<&'a str>,
 }
 
 impl<'a, I, W> PlaintextWriter<'a, I, W>
@@ -260,7 +253,7 @@ where
     I: Iterator<Item = Event<'a>>,
     W: StrWrite,
 {
-    fn new(iter: I, writer: W) -> Self {
+    fn new(iter: I, writer: W, canonical_root_url: Option<&'a str>) -> Self {
         Self {
             iter,
             writer,
@@ -268,6 +261,7 @@ where
             current_line: String::new(),
             line_length: 72,
             ignore_tags: vec!["tool-tip"],
+            canonical_root_url,
         }
     }
 
@@ -382,7 +376,13 @@ where
             }
             Tag::Link(_link_type, dest, _title) => {
                 self.current_line.push_str(" (");
+                if let Some(root_url_value) = self.canonical_root_url {
+                    if relative_url(&dest) {
+                        self.current_line.push_str(root_url_value);
+                    }
+                }
                 self.current_line.push_str(&dest);
+
                 self.current_line.push(')');
             }
             _ => {}
@@ -391,18 +391,20 @@ where
     }
 }
 
-fn push_plaintext<'a, I>(s: &mut String, iter: I)
+fn push_plaintext<'a, I>(s: &mut String, iter: I, canonical_root_url: Option<&'a str>)
 where
     I: Iterator<Item = Event<'a>>,
 {
-    PlaintextWriter::new(iter, s).run().unwrap();
+    PlaintextWriter::new(iter, s, canonical_root_url)
+        .run()
+        .unwrap();
 }
 
-pub fn parse_markdown_to_plaintext(markdown: &str) -> String {
+pub fn parse_markdown_to_plaintext(markdown: &str, canonical_root_url: Option<&str>) -> String {
     let mut plaintext_buf = String::new();
     let mut options = Options::empty();
     options.insert(Options::ENABLE_SMART_PUNCTUATION);
     let parser = Parser::new_ext(markdown, Options::empty());
-    push_plaintext(&mut plaintext_buf, parser);
+    push_plaintext(&mut plaintext_buf, parser, canonical_root_url);
     plaintext_buf
 }
