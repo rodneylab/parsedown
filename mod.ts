@@ -1,8 +1,8 @@
 import {
-	instantiate,
-	markdown_to_html,
-	markdown_to_plaintext,
-	mjml_to_html
+  instantiate,
+  markdown_to_html,
+  markdown_to_plaintext,
+  mjml_to_html,
 } from "./lib/parsedown.generated.js";
 
 interface MarkdownToHtmlOKOutput {

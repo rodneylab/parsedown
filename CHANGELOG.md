@@ -1,4 +1,4 @@
-## 1.3.0 (2023-01-12)
+## 1.3.1 (2023-01-12)
 
 ### Feat
 
@@ -8,6 +8,7 @@
 
 ### Fix
 
+- 💫 update LICENSE
 - accept input canonical base url parameters to allow converion of relative URLs
   to absolute ones
 - 💫 add target blank to non relative anchor tags
