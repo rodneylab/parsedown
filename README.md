@@ -77,7 +77,7 @@ statistics: {
 */
 ```
 
-- Parse Markdown to Plaintext
+- Parse Markdown to Plain Text
 
 ```typescript
 import init, {
@@ -88,7 +88,7 @@ import init, {
 
 await init();
 
-const plaintext = await markdown_to_plaintext(
+const plaintext = markdown_to_plaintext(
   `
 ## 👋🏽 Hello You
 
@@ -157,8 +157,85 @@ p { display: block; margin: 13px 0; }
 
 ## Compile WASM in Deno project
 
-WIP
+If you are working in Deno, you will probably find the `wasmbuild` package
+useful.
+
+1. Add a `wasmbuild` task to you `deno.json` file:
+
+```json
+{
+  "tasks": {
+    // ...TRUNCATED
+    "wasmbuild": "deno run -A https://deno.land/x/wasmbuild@0.10.2/main.ts"
+  }
+  // TRUNCATED...
+}
+```
+
+2. Run `deno task wasmbuild -- --init` to initialise `wasmbuild` in your
+   project. This will create a skeleton WASM project with an `rs_lib` directory.
+
+3. Clone this repo and replace the contents of the `rs_lib/src` directory in
+   your project with the contents of this repo&rsquo;s `src` directory. Also
+   replace `rs_lib/Cargo.toml` with `Cargo.toml` from this repo.
+
+4. Run the `deno task wasmbuild` command. This will generate JavaScript code and
+   WASM modules from the Rust source code. In particular, there should now be
+   `lib/rs_lib_bg.wasm` and `lib/rs_lib.generated.js` files in your project.
+
+5. You can now use the library functions in your JavaScript or TypeScript code.
+   Usage is only slightly different from the descriptions above.
+
+   - You can import the functions from `lib/rs_lib.generated.js`:
+
+   ```typescript
+   import {
+     instantiate,
+     markdown_to_html,
+     markdown_to_plaintext,
+     mjml_to_html,
+   } from "@/lib/rs_lib.generated.js";
+   ```
+
+   - **Before using any of the functions call `instantiate`**:
+
+   ```typescript
+   await instantiate();
+   ```
+
+   - The functions will now work as above:
+
+   ```typescript
+   const { errors, headings, html, statistics } = await markdown_to_html(
+     `
+   ## 👋🏽 Hello You
+
+   * alpha
+   * beta
+    `,
+     {},
+   );
+
+   const plaintext = markdown_to_plaintext(
+     `
+   ## 👋🏽 Hello You
+
+   * alpha
+   * beta
+
+   [Example Link](https://example.com/)
+   `,
+     {},
+   );
+
+   const html = mjml_to_html("<mjml></mjml>");
+   ```
 
 ## 🗺️ Roadmap
 
-- add text readability statistics
+- add text readability statistics (Gunning Fog index for example)
+
+## ☎️ Reach Out
+
+Feel free to jump into the
+[Rodney Lab matrix chat room](https://matrix.to/#/%23rodney:matrix.org).
