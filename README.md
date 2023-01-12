@@ -161,4 +161,4 @@ WIP
 
 ## 🗺️ Roadmap
 
-- and text readability statistics
+- add text readability statistics
