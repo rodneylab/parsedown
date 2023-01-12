@@ -117,7 +117,12 @@ hello you
 * beta
 "#;
 
-        let result = markdown_to_processed_html(markdown);
+        let result = markdown_to_processed_html(
+            markdown,
+            &ParseInputOptions {
+                canonical_root_url: None,
+            },
+        );
         let html = Some(String::from(
             r#"<h1 id="hello-you">hello you</h1>
 <ul>
@@ -142,7 +147,12 @@ hello you
 Paragraph text.
 "#;
 
-        let result = markdown_to_processed_html(markdown);
+        let result = markdown_to_processed_html(
+            markdown,
+            &ParseInputOptions {
+                canonical_root_url: None,
+            },
+        );
         let html = Some(String::from(
             r##"<h2 id="subheading">Subheading <a href="#subheading" class="heading-anchor">#</a></h2>
 <p>Paragraph text.</p>
@@ -164,7 +174,12 @@ Paragraph text.
 Link: [Example site](https://example.com).
 "#;
 
-        let result = markdown_to_processed_html(markdown);
+        let result = markdown_to_processed_html(
+            markdown,
+            &ParseInputOptions {
+                canonical_root_url: None,
+            },
+        );
         let html = Some(String::from(
             r##"<h3 id="subheading">Subheading</h3>
 <p>Link: <a href="https://example.com" target="_blank" rel="nofollow noopener noreferrer">Example site</a>.</p>

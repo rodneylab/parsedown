@@ -18,24 +18,24 @@ fn test_builder_process() {
 
 #[test]
 fn test_process_html() {
-    let result = process_html("<a href=\"https://example.com\">Example</a>");
+    let result = process_html("<a href=\"https://example.com\">Example</a>", None);
     let expected = r#"<a href="https://example.com" target="_blank" rel="nofollow noopener noreferrer">Example</a>"#;
     assert_eq!(result, expected);
 
-    let result = process_html("<a href=\"/pathname?utm=123#anchor\">Example</a>");
+    let result = process_html("<a href=\"/pathname?utm=123#anchor\">Example</a>", None);
     let expected = r#"<a href="/pathname?utm=123#anchor">Example</a>"#;
     assert_eq!(result, expected);
 
-    let result = process_html("<h2>Heading</h2>");
+    let result = process_html("<h2>Heading</h2>", None);
     let expected = "<h2>Heading</h2>";
     assert_eq!(result, expected);
 
-    let result = process_html("<h2 id=\"heading\">Heading</h2>");
+    let result = process_html("<h2 id=\"heading\">Heading</h2>", None);
     let expected =
         "<h2 id=\"heading\">Heading <a href=\"#heading\" class=\"heading-anchor\">#</a></h2>";
     assert_eq!(result, expected);
 
-    let result = process_html("<h3 id=\"heading\">Heading</h3>");
+    let result = process_html("<h3 id=\"heading\">Heading</h3>", None);
     let expected = "<h3 id=\"heading\">Heading</h3>";
     assert_eq!(result, expected);
 }

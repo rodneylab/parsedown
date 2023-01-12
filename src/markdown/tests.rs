@@ -68,7 +68,7 @@ hello
 fn test_parse_markdown_to_plaintext() {
     let markdown = "## 🧑🏽‍🍳 Pick of the Month — vanilla-extract";
 
-    let result = parse_markdown_to_plaintext(markdown);
+    let result = parse_markdown_to_plaintext(markdown, None);
     let expected = String::from("🧑🏽\u{200d}🍳 Pick of the Month — vanilla-extract\n");
     assert_eq!(result, expected);
 
@@ -76,7 +76,7 @@ fn test_parse_markdown_to_plaintext() {
 testing, testing one, two, three, four, five, six, seven, eight, nine,  ten, eleven
 "#;
 
-    let result = parse_markdown_to_plaintext(markdown);
+    let result = parse_markdown_to_plaintext(markdown, None);
     let expected = String::from(
         "testing, testing one, two, three, four, five, six, seven, eight, nine,\nten, eleven\n",
     );
@@ -84,7 +84,7 @@ testing, testing one, two, three, four, five, six, seven, eight, nine,  ten, ele
 
     let markdown =
         r#"<abbr>CLI<tool-tip inert role="tooltip">Command Line Interface</tool-tip></abbr>"#;
-    let result = parse_markdown_to_plaintext(markdown);
+    let result = parse_markdown_to_plaintext(markdown, None);
     let expected = String::from("CLI\n");
     assert_eq!(result, expected);
 }
