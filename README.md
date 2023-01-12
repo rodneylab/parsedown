@@ -172,8 +172,8 @@ useful.
 }
 ```
 
-2. Run `deno task wasmbuild -- --init` to initialise `wasmbuild` in your
-   project. This will create a skeleton WASM project with an `rs_lib` directory.
+2. Run `deno task wasmbuild --init` to initialise `wasmbuild` in your project.
+   This will create a skeleton WASM project with an `rs_lib` directory.
 
 3. Clone this repo and replace the contents of the `rs_lib/src` directory in
    your project with the contents of this repo&rsquo;s `src` directory. Also
