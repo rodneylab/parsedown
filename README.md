@@ -29,7 +29,7 @@ wasm-pack build --target web
 2. Copy the generated `pkg` folder into your JavaScript or TypeScript project.
 3. Import and use the code in one of your project source files:
 
-   a. Parse Markdown to HTML
+- Parse Markdown to HTML
 
 ```typescript
 import init, {
@@ -77,7 +77,7 @@ statistics: {
 */
 ```
 
-    b. Parse Markdown to Plaintext
+- Parse Markdown to Plaintext
 
 ```typescript
 import init, {
@@ -112,7 +112,7 @@ Example Link (https://example.com/)
 */
 ```
 
-    c. Parse MJML (email template) to HTML
+- Parse MJML (email template) to HTML
 
 ```typescript
 import init, {
@@ -123,7 +123,7 @@ import init, {
 
 await init();
 
-const plaintext = await markdown_to_plaintext("<mjml></mjml>");
+const html = await mjml_to_html("<mjml></mjml>");
 
 /*
 plaintext: `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -153,7 +153,7 @@ p { display: block; margin: 13px 0; }
 */
 ```
 
-**You must call `init` once before using one of the functions.**
+**You must call `init` once before using any of the other functions.**
 
 ## Compile WASM in Deno project
 
