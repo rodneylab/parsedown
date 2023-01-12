@@ -1,7 +1,8 @@
-## 1.2.1 (2023-01-03)
+## 1.3.0 (2023-01-12)
 
 ### Feat
 
+- 🌟 add Deno module
 - 🌟 output an array of headings each with its id
 - 🌟 add Markdown parsing to hard wrapped lines of plaintext
 
