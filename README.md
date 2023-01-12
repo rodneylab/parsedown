@@ -9,7 +9,8 @@
   parsedown
 </h1>
 
-Light touch Markdown parsing into HTML written in Rust. Generates WASM and can be used with Deno Fresh.
+Light touch Markdown parsing into HTML written in Rust. Generates WASM and can
+be used with Deno Fresh.
 
 - adds an id and anchor link to each h2 heading for easy linking,
 - adds pretty punctuation,
@@ -17,16 +18,16 @@ Light touch Markdown parsing into HTML written in Rust. Generates WASM and can b
 
 ## Compile WASM (see next section instead if working with Deno)
 
-1. Clone the project and change into the project directory. Then run these commands
+1. Clone the project and change into the project directory. Then run these
+   commands:
 
 ```shell
 cargo install wasm-pack # skip if you already have it installed
 wasm-pack build --target web
 ```
 
-1. Copy the generated `pkg` folder into your JavaScript or TypeScript project.
-
-1. Import the code into the source file you want to use it in:
+2. Copy the generated `pkg` folder into your JavaScript or TypeScript project.
+3. Import and use the code in one of yout project source files:
 
 ```typescript
 import init, {
@@ -41,18 +42,16 @@ await init();
 (async () => {
   await init();
 })();
-```
 
-```typescript
-  const { errors, headings, html, statistics } = await markdown_to_html(
-    `
+const { errors, headings, html, statistics } = await markdown_to_html(
+  `
 ## 👋🏽 Hello You
 
 * alpha
 * beta
 `,
-    {}
-  );
+  {},
+);
 
 /*
 errors: "undefined"
@@ -70,12 +69,16 @@ html: `<h2 id="wave-skin-tone-4-hello-you">👋🏽 Hello You <a href="#wave-ski
 `
 
 statistics: {
-  reading_time: 1, // minutes
+  reading_time: 1, // in minutes
   word_count: 4
 }
 */
 ```
+
+**You must call `init` once before using one of the functions.**
+
 ## Compile WASM in Deno project
+
 WIP
 
 ## 🗺️ Roadmap
