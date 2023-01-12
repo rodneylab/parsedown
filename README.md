@@ -27,8 +27,9 @@ wasm-pack build --target web
 ```
 
 2. Copy the generated `pkg` folder into your JavaScript or TypeScript project.
-3. Import and use the code in one of your project source files: a. Parse
-   Markdown to HTML
+3. Import and use the code in one of your project source files:
+
+   a. Parse Markdown to HTML
 
 ```typescript
 import init, {
