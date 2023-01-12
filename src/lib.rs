@@ -61,16 +61,6 @@ fn markdown_to_processed_html(markdown: &str, options: &ParseInputOptions) -> Pa
     }
 }
 
-// fn get_options(options: JsValue) -> ParseInputOptions {
-//     let input_options: Option<ParseInputOptions> = serde_wasm_bindgen::from_value(options).unwrap();
-//     match input_options {
-//         Some(value) => &value,
-//         None => &ParseInputOptions {
-//             canonical_root_url: None,
-//         },
-//     }
-// }
-
 #[wasm_bindgen]
 pub fn markdown_to_html(markdown: &str, options: JsValue) -> JsValue {
     let input_options: Option<ParseInputOptions> = serde_wasm_bindgen::from_value(options).unwrap();
