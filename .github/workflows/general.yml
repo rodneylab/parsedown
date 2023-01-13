@@ -5,7 +5,7 @@ on:
     branches:
       - main
   pull_request:
-    types: [ opened, synchronize, reopened ]
+    types: [opened, synchronize, reopened]
     branches:
       - main
 
@@ -90,9 +90,9 @@ jobs:
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
         with:
-          args: '--ignore-tests --avoid-cfg-tarpaulin'
+          args: "--ignore-tests --avoid-cfg-tarpaulin"
   test-ci:
-    runs-on: ${{ matrix.os }
+    runs-on: ${{ matrix.os }}
     strategy:
     matrix:
     os: [ubuntu-latest]
