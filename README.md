@@ -1,6 +1,6 @@
 <img src="./images/rodneylab-github-parsedown.png" alt="Rodney Lab parse down Github banner">
 
-<p style="display:grid;place-items:center;margin-block:2rem">
+<p align="center" style="display:grid;place-items:center;margin-block:2rem">
   <a aria-label="Open Rodney Lab site" href="https://rodneylab.com" rel="nofollow noopener noreferrer">
     <img alt="Rodney Lab logo" src="https://rodneylab.com/assets/icon.png" width="60" />
   </a>
