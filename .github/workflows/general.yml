@@ -92,20 +92,19 @@ jobs:
         with:
           args: '--ignore-tests --avoid-cfg-tarpaulin'
   test-ci:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }
+    strategy:
+    matrix:
+    os: [ubuntu-latest]
+    deno: ["1.29.2"]
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup Deno
-        uses: ./
-        with:
-          deno-version: 1.29.2
 
       - name: Test Modules
         run: deno task test
 
       - name: Format
-        run: deno fmt
+        run: deno fmt --check
 
       - name: Lint
         run: deno lint
