@@ -94,9 +94,9 @@ jobs:
   test-ci:
     runs-on: ${{ matrix.os }}
     strategy:
-    matrix:
-    os: [ubuntu-latest]
-    deno: ["1.29.2"]
+      matrix:
+        os: [ubuntu-latest]
+        deno: ["1.29.2"]
     steps:
       - uses: actions/checkout@v2
 
