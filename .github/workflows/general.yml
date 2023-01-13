@@ -91,20 +91,37 @@ jobs:
         uses: actions-rs/tarpaulin@v0.1
         with:
           args: "--ignore-tests --avoid-cfg-tarpaulin"
-  test-ci:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        deno: ["1.29.2"]
+  deno-check:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Clone repository
+      - uses: actions/checkout@v3
 
-      - name: Test Modules
-        run: deno task test
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
 
-      - name: Format
+      - name: Check formatting
         run: deno fmt --check
 
       - name: Lint
         run: deno lint
+
+      - name: Type Check
+        run: deno check mod.ts
+
+  deno-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+      - uses: actions/checkout@v2
+
+      - name: Install Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - name: Test Modules
+        run: deno task test
+
