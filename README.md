@@ -1,6 +1,6 @@
 <img src="./images/rodneylab-github-parsedown.png" alt="Rodney Lab parse down Github banner">
 
-<p align="center">
+<p style="display:grid;place-items:center;margin-block:2rem">
   <a aria-label="Open Rodney Lab site" href="https://rodneylab.com" rel="nofollow noopener noreferrer">
     <img alt="Rodney Lab logo" src="https://rodneylab.com/assets/icon.png" width="60" />
   </a>
@@ -16,36 +16,22 @@ be used with Deno Fresh.
 - adds pretty punctuation,
 - uses html5ever for HTML manipulation and pulldown-cmark for Markdown parsing.
 
-## Compile WASM (see next section instead if working with Deno)
+## Using Module
 
-1. Clone the project and change into the project directory. Then run these
-   commands:
-
-```shell
-cargo install wasm-pack # skip if you already have it installed
-wasm-pack build --target web
-```
-
-2. Copy the generated `pkg` folder into your JavaScript or TypeScript project.
-3. Import and use the code in one of your project source files:
+The module is hosted on deno.x and you can import directly into your TypeScript
+project (no need to touch WASM or Rust source). See the later sections below if
+you want to compile the WASM yourself.
 
 - Parse Markdown to HTML
 
 ```typescript
-import init, {
-  markdown_to_html,
-  markdown_to_plaintext,
-  mjml_to_html,
-} from "pkg/parsedown.js";
+import {
+  markdownToHtml,
+  markdownToPlaintext,
+  mjmlToHtml,
+} from "https://deno.land/x/parsedown@1.3.1/mod.ts";
 
-await init();
-
-// alternative if top level await is not available
-(async () => {
-  await init();
-})();
-
-const { errors, headings, html, statistics } = await markdown_to_html(
+const { errors, headings, html, statistics } = await markdownToHtml(
   `
 ## 👋🏽 Hello You
 
@@ -80,15 +66,13 @@ statistics: {
 - Parse Markdown to Plain Text
 
 ```typescript
-import init, {
-  markdown_to_html,
-  markdown_to_plaintext,
-  mjml_to_html,
-} from "pkg/parsedown.js";
+import {
+  markdownToHtml,
+  markdownToPlaintext,
+  mjmlToHtml,
+} from "https://deno.land/x/parsedown@1.3.1/mod.ts";
 
-await init();
-
-const plaintext = markdown_to_plaintext(
+const plaintext = await markdownToPlaintext(
   `
 ## 👋🏽 Hello You
 
@@ -115,15 +99,13 @@ Example Link (https://example.com/)
 - Parse MJML (email template) to HTML
 
 ```typescript
-import init, {
-  markdown_to_html,
-  markdown_to_plaintext,
-  mjml_to_html,
-} from "pkg/parsedown.js";
+import {
+  markdownToHtml,
+  markdownToPlaintext,
+  mjmlToHtml,
+} from "https://deno.land/x/parsedown@1.3.1/mod.ts";
 
-await init();
-
-const html = await mjml_to_html("<mjml></mjml>");
+const html = await mjmlToHtml("<mjml></mjml>");
 
 /*
 plaintext: `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -153,6 +135,89 @@ p { display: block; margin: 13px 0; }
 */
 ```
 
+## Compile WASM (see next section instead if working with Deno)
+
+_Method above is tested with Deno, you only need to compile the WASM yourself if
+you have issues in other runtimes or are customising the Rust source code for
+your own needs._
+
+1. Clone the project and change into the project directory. Then run these
+   commands:
+
+```shell
+cargo install wasm-pack # skip if you already have it installed
+wasm-pack build --target web
+```
+
+2. Copy the generated `pkg` folder into your JavaScript or TypeScript project.
+3. Import and use the code in one of your project source files (expected output
+   is as shown in previous section):
+
+- Parse Markdown to HTML
+
+```typescript
+import init, {
+  markdown_to_html,
+  markdown_to_plaintext,
+  mjml_to_html,
+} from "pkg/parsedown.js";
+
+await init();
+
+// alternative if top level await is not available
+(async () => {
+  await init();
+})();
+
+const { errors, headings, html, statistics } = await markdown_to_html(
+  `
+## 👋🏽 Hello You
+
+* alpha
+* beta
+`,
+  {},
+);
+```
+
+- Parse Markdown to Plain Text
+
+```typescript
+import init, {
+  markdown_to_html,
+  markdown_to_plaintext,
+  mjml_to_html,
+} from "pkg/parsedown.js";
+
+await init();
+
+const plaintext = markdown_to_plaintext(
+  `
+## 👋🏽 Hello You
+
+* alpha
+* beta
+
+[Example Link](https://example.com/)
+`,
+  {},
+);
+```
+
+- Parse MJML (email template) to HTML
+
+```typescript
+import init, {
+  markdown_to_html,
+  markdown_to_plaintext,
+  mjml_to_html,
+} from "pkg/parsedown.js";
+
+await init();
+
+const html = await mjml_to_html("<mjml></mjml>");
+```
+
 **You must call `init` once before using any of the other functions.**
 
 ## Compile WASM in Deno project
@@ -162,7 +227,7 @@ useful.
 
 1. Add a `wasmbuild` task to you `deno.json` file:
 
-```json
+```json5
 {
   "tasks": {
     // ...TRUNCATED
