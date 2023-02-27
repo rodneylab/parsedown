@@ -225,7 +225,7 @@ const html = await mjml_to_html("<mjml></mjml>");
 If you are working in Deno, you will probably find the `wasmbuild` package
 useful.
 
-1. Add a `wasmbuild` task to you `deno.json` file:
+1. Add a `wasmbuild` task to your `deno.json` file:
 
 ```json5
 {
