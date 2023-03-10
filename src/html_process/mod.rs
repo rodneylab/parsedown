@@ -72,7 +72,7 @@ impl<'a> Builder<'a> {
         );
 
         while let Some(mut node) = stack.pop() {
-            let parent = node.parent.replace(None).expect("a node in the DO will have a parent, except the root, which is not processed")
+            let parent = node.parent.replace(None).expect("a node in the DOM will have a parent, except the root, which is not processed")
                 .upgrade().expect("a node's parent will be pointed to by its parent (or the root pointer), and will not be dropped");
             let pass_process = self.process_child(&mut node);
             if pass_process {
