@@ -1,16 +1,17 @@
-## 1.3.1 (2023-01-12)
+## 1.4.0 (2023-04-01)
 
 ### Feat
 
+- new feature for highlighting a search term in HTML text nodes, wrapping in a mark element
 - 🌟 add Deno module
 - 🌟 output an array of headings each with its id
 - 🌟 add Markdown parsing to hard wrapped lines of plaintext
 
 ### Fix
 
+- **dependencies**: 💫 update crates
 - 💫 update LICENSE
-- accept input canonical base url parameters to allow converion of relative URLs
-  to absolute ones
+- accept input canonical base url parameters to allow converion of relative URLs to absolute ones
 - 💫 add target blank to non relative anchor tags
 
 ## 1.0.0 (2022-12-23)
