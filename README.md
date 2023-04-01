@@ -18,7 +18,7 @@ be used with Deno Fresh.
 
 ## Using Module
 
-The module is hosted on deno.x and you can import directly into your TypeScript
+The module is hosted on deno.x, and you can import directly into your TypeScript
 project (no need to touch WASM or Rust source). See the later sections below if
 you want to compile the WASM yourself.
 
@@ -298,7 +298,7 @@ useful.
 
 ## 🗺️ Roadmap
 
-- add text readability statistics (Gunning Fog index for example)
+- add text readability statistics (Gunning Fog index, for example)
 
 ## ☎️ Reach Out
 
