@@ -400,11 +400,46 @@ where
         .unwrap();
 }
 
-pub fn parse_markdown_to_plaintext(markdown: &str, canonical_root_url: Option<&str>) -> String {
+#[derive(Debug)]
+pub struct ParseMarkdownOptions<'a> {
+    canonical_root_url: Option<&'a str>,
+    enable_smart_punctuation: bool,
+}
+
+impl<'a> Default for ParseMarkdownOptions<'a> {
+    fn default() -> Self {
+        ParseMarkdownOptions {
+            canonical_root_url: None,
+            enable_smart_punctuation: true,
+        }
+    }
+}
+
+impl<'a> ParseMarkdownOptions<'a> {
+    pub fn canonical_root_url(&mut self, value: Option<&'a str>) -> &mut Self {
+        self.canonical_root_url = value;
+        self
+    }
+
+    pub fn enable_smart_punctuation(&mut self, value: bool) -> &mut Self {
+        self.enable_smart_punctuation = value;
+        self
+    }
+}
+
+pub fn parse_markdown_to_plaintext(markdown: &str, options: ParseMarkdownOptions) -> String {
+    let ParseMarkdownOptions {
+        canonical_root_url,
+        enable_smart_punctuation,
+    } = options;
+
+    let mut parser_options = Options::empty();
+    if enable_smart_punctuation {
+        parser_options.insert(Options::ENABLE_SMART_PUNCTUATION);
+    }
+    let parser = Parser::new_ext(markdown, parser_options);
+
     let mut plaintext_buf = String::new();
-    let mut options = Options::empty();
-    options.insert(Options::ENABLE_SMART_PUNCTUATION);
-    let parser = Parser::new_ext(markdown, Options::empty());
     push_plaintext(&mut plaintext_buf, parser, canonical_root_url);
     plaintext_buf
 }

@@ -1,6 +1,6 @@
 [package]
 name = "parsedown"
-version = "1.3.0"
+version = "1.4.0"
 authors = ["Rodney Johnson <ask@rodneylab.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
@@ -17,6 +17,7 @@ lto = true
 opt-level = "z"
 
 [dependencies]
+aho-corasick = "0.7.20"
 deunicode = "1.3.3"
 getrandom = { version = "0.2.8", features = ["js"] }
 html5ever = "0.26.0"

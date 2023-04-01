@@ -3,7 +3,10 @@ mod markdown;
 mod url_utility;
 
 use html_process::process_html;
-use markdown::{parse_markdown_to_html, parse_markdown_to_plaintext, Heading, TextStatistics};
+use markdown::{
+    parse_markdown_to_html, parse_markdown_to_plaintext, Heading, ParseMarkdownOptions,
+    TextStatistics,
+};
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::{prelude::*, JsValue};
 
@@ -22,6 +25,8 @@ macro_rules! console_log {
 #[derive(Deserialize)]
 pub struct ParseInputOptions {
     canonical_root_url: Option<String>,
+    enable_smart_punctuation: Option<bool>,
+    search_term: Option<String>,
 }
 
 #[derive(Debug, Eq, PartialEq, Serialize)]
@@ -38,6 +43,7 @@ fn markdown_to_processed_html(markdown: &str, options: &ParseInputOptions) -> Pa
             let html = Some(process_html(
                 &html_value,
                 options.canonical_root_url.as_deref(),
+                options.search_term.as_deref(),
             ));
             let headings = Some(headings);
             let statistics = Some(statistics_value);
@@ -68,6 +74,8 @@ pub fn markdown_to_html(markdown: &str, options: JsValue) -> JsValue {
         Some(value) => value,
         None => ParseInputOptions {
             canonical_root_url: None,
+            enable_smart_punctuation: Some(true),
+            search_term: None,
         },
     };
     let results = markdown_to_processed_html(markdown, &parse_options);
@@ -77,11 +85,24 @@ pub fn markdown_to_html(markdown: &str, options: JsValue) -> JsValue {
 #[wasm_bindgen]
 pub fn markdown_to_plaintext(markdown: &str, options: JsValue) -> String {
     let input_options: Option<ParseInputOptions> = serde_wasm_bindgen::from_value(options).unwrap();
-    let canonical_root_url = match input_options {
-        Some(value) => value.canonical_root_url,
-        None => None,
-    };
-    parse_markdown_to_plaintext(markdown, canonical_root_url.as_deref())
+    let mut markdown_options = ParseMarkdownOptions::default();
+
+    if let Some(ParseInputOptions {
+        canonical_root_url,
+        enable_smart_punctuation,
+        ..
+    }) = input_options
+    {
+        let canonical_root_url = canonical_root_url.as_deref();
+        markdown_options.canonical_root_url(canonical_root_url);
+
+        if let Some(value) = enable_smart_punctuation {
+            markdown_options.enable_smart_punctuation(value);
+        }
+        parse_markdown_to_plaintext(markdown, markdown_options)
+    } else {
+        parse_markdown_to_plaintext(markdown, markdown_options)
+    }
 }
 
 #[wasm_bindgen]
@@ -121,6 +142,8 @@ hello you
             markdown,
             &ParseInputOptions {
                 canonical_root_url: None,
+                enable_smart_punctuation: Some(true),
+                search_term: None,
             },
         );
         let html = Some(String::from(
@@ -151,6 +174,8 @@ Paragraph text.
             markdown,
             &ParseInputOptions {
                 canonical_root_url: None,
+                enable_smart_punctuation: Some(true),
+                search_term: None,
             },
         );
         let html = Some(String::from(
@@ -178,6 +203,8 @@ Link: [Example site](https://example.com).
             markdown,
             &ParseInputOptions {
                 canonical_root_url: None,
+                enable_smart_punctuation: Some(true),
+                search_term: None,
             },
         );
         let html = Some(String::from(
