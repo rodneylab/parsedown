@@ -1,3 +1,10 @@
+## 1.4.1 (2023-04-03)
+
+### Fix
+
+- 💫 add tests and tighter integration for new search term highlighting feature
+- 💫 update dependencies
+
 ## 1.4.0 (2023-04-01)
 
 ### Feat
