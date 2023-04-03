@@ -1,7 +1,4 @@
-import {
-  assert,
-  assertEquals,
-} from "https://deno.land/std@0.170.0/testing/asserts.ts";
+import { assert, assertEquals } from "$std/testing/asserts.ts";
 import { markdownToHtml, markdownToPlaintext, mjmlToHtml } from "./mod.ts";
 
 Deno.test("it parses markdown to html", async () => {
@@ -14,21 +11,21 @@ Deno.test("it parses markdown to html", async () => {
 `;
 
   // act
-  const { errors, html, headings, statistics } = await markdownToHtml(
+  const { errors, html, headings, statistics } = (await markdownToHtml(
     markdown,
     {},
-  );
+  ))!;
 
   // assert
   assert(typeof markdownToHtml === "function");
 
   assertEquals(typeof errors, "undefined");
-  assert(typeof statistics !== "undefined");
 
-  const { reading_time, word_count } = statistics;
+  const { reading_time, word_count } = statistics!;
 
-  assertEquals(headings.length, 1);
-  assertEquals(headings[0], {
+  assert(typeof headings !== "undefined");
+  assertEquals(headings!.length, 1);
+  assertEquals(headings![0], {
     heading: "👋🏽 Hello You",
     id: "wave-skin-tone-4-hello-you",
   });
@@ -44,6 +41,22 @@ Deno.test("it parses markdown to html", async () => {
 
   assertEquals(reading_time, 1);
   assertEquals(word_count, 4);
+});
+
+Deno.test("it highlights search terms in generated HTML", async () => {
+  // prepare
+  const markdown = "Nobody likes maple in their apple flavoured Snapple.";
+  // act
+  const { errors, html } = await markdownToHtml(markdown, {
+    searchTerm: "apple",
+  });
+
+  // assert
+  assertEquals(typeof errors, "undefined");
+  assertEquals(
+    html,
+    `<p>Nobody likes maple in their <mark id="search-match">apple</mark> flavoured Sn<mark>apple</mark>.</p>\n`,
+  );
 });
 
 Deno.test("it parses markdown to plain text", async () => {

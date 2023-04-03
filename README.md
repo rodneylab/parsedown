@@ -1,4 +1,4 @@
-<img src="./images/rodneylab-github-parsedown.png" alt="Rodney Lab parse down Github banner">
+<img src="./images/rodneylab-github-parsedown.png" alt="Rodney Lab parse down Git Hub banner">
 
 <p align="center" style="display:grid;place-items:center;margin-block:2rem">
   <a aria-label="Open Rodney Lab site" href="https://rodneylab.com" rel="nofollow noopener noreferrer">
@@ -12,9 +12,9 @@
 Light touch Markdown parsing into HTML written in Rust. Generates WASM and can
 be used with Deno Fresh.
 
-- adds an id and anchor link to each h2 heading for easy linking,
-- adds pretty punctuation,
-- uses html5ever for HTML manipulation and pulldown-cmark for Markdown parsing.
+- adds an id and anchor link to each h2 heading for easy linking
+- adds pretty punctuation
+- uses html5ever for HTML manipulation and pulldown-cmark for Markdown parsing
 
 ## Using Module
 
@@ -29,7 +29,7 @@ import {
   markdownToHtml,
   markdownToPlaintext,
   mjmlToHtml,
-} from "https://deno.land/x/parsedown@1.3.1/mod.ts";
+} from "https://deno.land/x/parsedown@1.4.0/mod.ts";
 
 const { errors, headings, html, statistics } = await markdownToHtml(
   `
@@ -63,6 +63,19 @@ statistics: {
 */
 ```
 
+```javascript
+const { html } = await markdownToHtml(
+  "Nobody likes maple in their apple flavoured Snapple.",
+  { searchTerm: "apple" },
+);
+
+html:
+`<p>Nobody likes maple in their <mark id="search-match">apple</mark> flavoured Sn<mark>apple</mark></p>`;
+```
+
+Note the `id` added to the first search match. You can use this to scroll the
+first match into view.
+
 - Parse Markdown to Plain Text
 
 ```typescript
@@ -70,7 +83,7 @@ import {
   markdownToHtml,
   markdownToPlaintext,
   mjmlToHtml,
-} from "https://deno.land/x/parsedown@1.3.1/mod.ts";
+} from "https://deno.land/x/parsedown@1.4.0/mod.ts";
 
 const plaintext = await markdownToPlaintext(
   `
@@ -103,7 +116,7 @@ import {
   markdownToHtml,
   markdownToPlaintext,
   mjmlToHtml,
-} from "https://deno.land/x/parsedown@1.3.1/mod.ts";
+} from "https://deno.land/x/parsedown@1.4.0/mod.ts";
 
 const html = await mjmlToHtml("<mjml></mjml>");
 
@@ -135,10 +148,10 @@ p { display: block; margin: 13px 0; }
 */
 ```
 
-## Compile WASM (see next section instead if working with Deno)
+## Compile WASM (see next section instead, if working with Deno)
 
 _Method above is tested with Deno, you only need to compile the WASM yourself if
-you have issues in other runtimes or are customising the Rust source code for
+you have issues in other runtimes or are customizing the Rust source code for
 your own needs._
 
 1. Clone the project and change into the project directory. Then run these
@@ -237,7 +250,7 @@ useful.
 }
 ```
 
-2. Run `deno task wasmbuild new` to initialise `wasmbuild` in your project. This
+2. Run `deno task wasmbuild new` to initialize `wasmbuild` in your project. This
    will create a skeleton WASM project with an `rs_lib` directory.
 
 3. Clone this repo and replace the contents of the `rs_lib/src` directory in

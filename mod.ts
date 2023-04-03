@@ -22,21 +22,48 @@ interface MarkdownToHtmlErrorOutput {
   statistics?: never;
 }
 
+interface MarkdownToHtmlOptions {
+  canonicalRootUrl?: string;
+  enableSmartPunctuation?: string;
+  searchTerm?: string;
+}
+
+type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
+
 const markdownToHtml: (
   markdown: string,
-  options?: { canonical_root_url?: string },
+  options?: MarkdownToHtmlOptions,
 ) => Promise<MarkdownToHtmlOKOutput | MarkdownToHtmlErrorOutput> =
   async function markdownToHtml(markdown, options) {
     await instantiate();
-    return markdown_to_html(markdown, options);
+    const { canonicalRootUrl, enableSmartPunctuation, searchTerm } = options ??
+      {};
+
+    return markdown_to_html(markdown, {
+      ...(typeof canonicalRootUrl !== "undefined"
+        ? { canonical_root_url: canonicalRootUrl }
+        : {}),
+      ...(typeof enableSmartPunctuation !== "undefined"
+        ? { enable_smart_punctuation: enableSmartPunctuation }
+        : {}),
+      ...(typeof searchTerm !== "undefined" ? { search_term: searchTerm } : {}),
+    });
   };
 
 const markdownToPlaintext: (
   markdown: string,
-  options?: { canonical_root_url?: string },
+  options?: MarkdownToPlaintextOptions,
 ) => Promise<string> = async function markdownToPlaintext(markdown, options) {
   await instantiate();
-  return markdown_to_plaintext(markdown, options);
+  const { canonicalRootUrl, enableSmartPunctuation } = options ?? {};
+  return markdown_to_plaintext(markdown, {
+    ...(typeof canonicalRootUrl !== "undefined"
+      ? { canonical_root_url: canonicalRootUrl }
+      : {}),
+    ...(typeof enableSmartPunctuation !== "undefined"
+      ? { enable_smart_punctuation: enableSmartPunctuation }
+      : {}),
+  });
 };
 
 const mjmlToHtml: (mjml: string) => Promise<string> = async function mjmlToHtml(
