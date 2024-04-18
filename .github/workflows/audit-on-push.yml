@@ -1,15 +1,6 @@
 name: Security audit
 permissions:
   contents: read
-github-token:
-  action-input:
-    input: token
-    is-default: false
-  permissions:
-    issues: write
-    issues-reason: to create issues
-    checks: write
-    checks-reason: to create check
 on:
   push:
     paths:

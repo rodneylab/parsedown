@@ -75,6 +75,8 @@ jobs:
     name: ubuntu / ${{ matrix.msrv }}
     steps:
       - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
+      - name: Install Linux Dependencies
+        run: sudo apt-get update
       - name: Install ${{ matrix.msrv }}
         uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
         with:
