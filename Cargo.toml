@@ -5,6 +5,8 @@ authors = ["Rodney Johnson <ask@rodneylab.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
 repository = "https://github.com/rodneylab/parsedown"
+# js-sys v.0.3.69 requires rustc 1.73
+rust-version = "1.73"
 description = "Markdown processing"
 
 [lib]
