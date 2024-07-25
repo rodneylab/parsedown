@@ -238,7 +238,7 @@ struct PlaintextWriter<'a, I, W> {
     /// Preferred length of wrapped out lines, currently fixed at 72
     line_length: usize,
 
-    /// HTML tags to ignore in ouput
+    /// HTML tags to ignore in output
     ignore_tags: Vec<&'a str>,
 
     /// Optionally prepended to relative URLs
