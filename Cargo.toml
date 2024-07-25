@@ -20,7 +20,7 @@ opt-level = "z"
 
 [dependencies]
 aho-corasick = "1.1.2"
-deunicode = "1.4.4"
+deunicode = "1.6.0"
 getrandom = { version = "0.2.14", features = ["js"] }
 html5ever = "0.26.0"
 js-sys = "0.3.69"
