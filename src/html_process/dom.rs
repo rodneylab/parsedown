@@ -14,7 +14,7 @@ use html5ever::{
         Serialize, Serializer,
         TraversalScope::{self, ChildrenOnly, IncludeNode},
     },
-    tendril::*,
+    tendril::StrTendril,
     Attribute, ExpandedName, QualName,
 };
 use std::{
@@ -30,7 +30,11 @@ pub enum NodeData {
     Document,
     Doctype {
         name: StrTendril,
+
+        #[allow(dead_code)]
         public_id: StrTendril,
+
+        #[allow(dead_code)]
         system_id: StrTendril,
     },
     Text {
@@ -92,7 +96,7 @@ impl fmt::Debug for Node {
         fmt.debug_struct("Node")
             .field("data", &self.data)
             .field("children", &self.children)
-            .finish()
+            .finish_non_exhaustive()
     }
 }
 
@@ -110,15 +114,14 @@ fn get_parent_and_index(target: &Handle) -> Option<(Handle, usize)> {
     if let Some(weak) = target.parent.take() {
         let parent = weak.upgrade().expect("dangling weak pointer");
         target.parent.set(Some(weak));
-        let i = match parent
+        let Some((i, _)) = parent
             .children
             .borrow()
             .iter()
             .enumerate()
             .find(|&(_, child)| Rc::ptr_eq(child, target))
-        {
-            Some((i, _)) => i,
-            None => panic!("have parent but couldn't find in parent's children!"),
+        else {
+            panic!("have parent but couldn't find in parent's children!")
         };
         Some((parent, i))
     } else {
@@ -143,6 +146,7 @@ fn remove_from_parent(target: &Handle) {
     }
 }
 
+#[allow(clippy::module_name_repetitions)]
 pub struct RcDom {
     pub document: Handle,
     pub errors: Vec<Cow<'static, str>>,
@@ -334,7 +338,7 @@ impl TreeSink for RcDom {
             assert!(Rc::ptr_eq(
                 node,
                 &previous_parent.unwrap().upgrade().expect("dangling weak")
-            ))
+            ));
         }
         new_children.extend(mem::take(&mut *children));
     }

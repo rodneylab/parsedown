@@ -34,7 +34,7 @@ use html5ever::{
     interface::tree_builder::{AppendNode, NodeOrText, TreeSink},
     local_name, namespace_url, ns,
     serialize::{serialize, SerializeOpts},
-    tendril::*,
+    tendril::{format_tendril, StrTendril, TendrilSink},
     Attribute, QualName,
 };
 use std::{
@@ -83,7 +83,7 @@ impl<'a> Builder<'a> {
         self
     }
 
-    fn process_child(&self, _child: &mut Handle) -> bool {
+    fn process_child(_child: &mut Handle) -> bool {
         true
     }
 
@@ -108,17 +108,17 @@ impl<'a> Builder<'a> {
         while let Some(mut node) = stack.pop() {
             let parent = node.parent.replace(None).expect("a node in the DOM will have a parent, except the root, which is not processed")
                 .upgrade().expect("a node's parent will be pointed to by its parent (or the root pointer), and will not be dropped");
-            let pass_process = self.process_child(&mut node);
+            let pass_process = Builder::<'a>::process_child(&mut node);
             if pass_process {
                 self.adjust_node_attributes(&mut node, &link_rel, &link_target);
-                self.adjust_node_children(&mut node, &mut dom);
+                Builder::<'a>::adjust_node_children(&mut node, &mut dom);
                 if self.search_term.is_some() {
                     if let Some(value) =
                         self.replacement_node(&mut node, &mut dom, &mut already_matched)
                     {
                         // node should be a TextNode and so have no children to check so OK to
                         // continue here
-                        for new_child_node in value.iter() {
+                        for new_child_node in &value {
                             dom.append(&parent, NodeOrText::AppendNode(new_child_node.clone()));
                         }
                         removed.push(node);
@@ -180,7 +180,7 @@ impl<'a> Builder<'a> {
                             attrs.push(Attribute {
                                 name: QualName::new(None, ns!(), local_name!("rel")),
                                 value: link_rel.clone(),
-                            })
+                            });
                         }
                     }
                 }
@@ -209,11 +209,14 @@ impl<'a> Builder<'a> {
                 .build(search_pattern);
             let mut matches = vec![];
             let search_content = contents.borrow();
-            for search_term_match in ac.find_iter(&search_content[..]) {
+            for search_term_match in ac
+                .expect("Search term should build valid Aho-Corasick instance")
+                .find_iter(&search_content[..])
+            {
                 matches.push((search_term_match.start(), search_term_match.end()));
             }
             let mut index: usize = 0;
-            for (start, end) in matches.iter() {
+            for (start, end) in &matches {
                 replacement_nodes.push(Node::new(NodeData::Text {
                     contents: RefCell::new(search_content[index..*start].into()),
                 }));
@@ -249,14 +252,13 @@ impl<'a> Builder<'a> {
             }));
             if replacement_nodes.is_empty() {
                 return None;
-            } else {
-                return Some(replacement_nodes);
             }
+            return Some(replacement_nodes);
         }
         None
     }
 
-    fn adjust_node_children(&self, child: &mut Handle, dom: &mut RcDom) {
+    fn adjust_node_children(child: &mut Handle, dom: &mut RcDom) {
         if let NodeData::Element {
             ref name,
             ref attrs,
