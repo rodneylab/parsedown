@@ -1,3 +1,5 @@
+#![warn(clippy::all, clippy::pedantic)]
+
 mod html_process;
 mod markdown;
 mod url_utility;
@@ -67,7 +69,11 @@ fn markdown_to_processed_html(markdown: &str, options: &ParseInputOptions) -> Pa
     }
 }
 
+/// # Panics
+///
+/// Will panic if unable to parse options
 #[wasm_bindgen]
+#[must_use]
 pub fn markdown_to_html(markdown: &str, options: JsValue) -> JsValue {
     let input_options: Option<ParseInputOptions> = serde_wasm_bindgen::from_value(options).unwrap();
     let parse_options = match input_options {
@@ -82,7 +88,11 @@ pub fn markdown_to_html(markdown: &str, options: JsValue) -> JsValue {
     serde_wasm_bindgen::to_value(&results).unwrap()
 }
 
+/// # Panics
+///
+/// Will panic if unable to parse options
 #[wasm_bindgen]
+#[must_use]
 pub fn markdown_to_plaintext(markdown: &str, options: JsValue) -> String {
     let input_options: Option<ParseInputOptions> = serde_wasm_bindgen::from_value(options).unwrap();
     let mut markdown_options = ParseMarkdownOptions::default();
@@ -99,19 +109,20 @@ pub fn markdown_to_plaintext(markdown: &str, options: JsValue) -> String {
         if let Some(value) = enable_smart_punctuation {
             markdown_options.enable_smart_punctuation(value);
         }
-        parse_markdown_to_plaintext(markdown, markdown_options)
+        parse_markdown_to_plaintext(markdown, &markdown_options)
     } else {
-        parse_markdown_to_plaintext(markdown, markdown_options)
+        parse_markdown_to_plaintext(markdown, &markdown_options)
     }
 }
 
 #[wasm_bindgen]
+#[must_use]
 pub fn mjml_to_html(mjml: &str) -> String {
     let root = match mrml::parse(mjml) {
         Ok(value) => value,
         Err(error) => {
             console_log!("Error parsing mjml: {:?}", error);
-            return String::from("");
+            return String::new();
         }
     };
     let opts = mrml::prelude::render::Options::default();
@@ -119,7 +130,7 @@ pub fn mjml_to_html(mjml: &str) -> String {
         Ok(value) => value,
         Err(error) => {
             console_log!("Error rendering parsed mjml to html: {:?}", error);
-            String::from("")
+            String::new()
         }
     }
 }

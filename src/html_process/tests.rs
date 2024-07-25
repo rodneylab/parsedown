@@ -48,13 +48,13 @@ fn test_process_html() {
 fn test_relative_url() {
     assert!(relative_url("/about.html"));
     assert!(relative_url("#some-id"));
-    assert_eq!(relative_url("https://example.com"), false);
+    assert!(!relative_url("https://example.com"));
 }
 
 #[test]
 fn search_html_highlight_requested_term() {
     let result = process_html(
-        r#"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p>"#,
+        r"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p>",
         None,
         Some("apple"),
     )
@@ -66,7 +66,7 @@ fn search_html_highlight_requested_term() {
 #[test]
 fn search_html_highlight_requested_nested_term() {
     let result = process_html(
-        r#"<h2>Heading</h2><section><div><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p></div></section>"#,
+        r"<h2>Heading</h2><section><div><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p></div></section>",
         None,
         Some("apple"),
     )
@@ -78,7 +78,7 @@ fn search_html_highlight_requested_nested_term() {
 #[test]
 fn search_html_matches_on_multiple_terms() {
     let result = process_html(
-        r#"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p>"#,
+        r"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p>",
         None,
         Some("apple flavour"),
     )

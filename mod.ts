@@ -1,9 +1,4 @@
-import {
-  instantiate,
-  markdown_to_html,
-  markdown_to_plaintext,
-  mjml_to_html,
-} from "./lib/parsedown.generated.js";
+import { instantiate } from "./lib/parsedown.generated.js";
 
 interface MarkdownToHtmlOKOutput {
   errors?: never;
@@ -35,11 +30,12 @@ const markdownToHtml: (
   options?: MarkdownToHtmlOptions,
 ) => Promise<MarkdownToHtmlOKOutput | MarkdownToHtmlErrorOutput> =
   async function markdownToHtml(markdown, options) {
-    await instantiate();
+    const { markdown_to_html } = await instantiate();
     const { canonicalRootUrl, enableSmartPunctuation, searchTerm } = options ??
       {};
 
     return markdown_to_html(markdown, {
+      enable_smart_punctuation: true,
       ...(typeof canonicalRootUrl !== "undefined"
         ? { canonical_root_url: canonicalRootUrl }
         : {}),
@@ -54,7 +50,7 @@ const markdownToPlaintext: (
   markdown: string,
   options?: MarkdownToPlaintextOptions,
 ) => Promise<string> = async function markdownToPlaintext(markdown, options) {
-  await instantiate();
+  const { markdown_to_plaintext } = await instantiate();
   const { canonicalRootUrl, enableSmartPunctuation } = options ?? {};
   return markdown_to_plaintext(markdown, {
     ...(typeof canonicalRootUrl !== "undefined"
@@ -69,7 +65,7 @@ const markdownToPlaintext: (
 const mjmlToHtml: (mjml: string) => Promise<string> = async function mjmlToHtml(
   mjml,
 ) {
-  await instantiate();
+  const { mjml_to_html } = await instantiate();
   return mjml_to_html(mjml);
 };
 

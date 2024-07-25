@@ -1,4 +1,4 @@
-import { assert, assertEquals } from "$std/testing/asserts.ts";
+import { assert, assertEquals } from "@std/assert";
 import { markdownToHtml, markdownToPlaintext, mjmlToHtml } from "./mod.ts";
 
 Deno.test("it parses markdown to html", async () => {

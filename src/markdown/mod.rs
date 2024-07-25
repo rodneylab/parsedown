@@ -5,7 +5,6 @@ use crate::url_utility::relative_url;
 
 use deunicode::deunicode;
 use nom::{
-    self,
     branch::alt,
     bytes::complete::{is_not, tag},
     character::complete::multispace0,
@@ -23,8 +22,9 @@ use std::io::{self, Cursor};
 use textwrap::wrap;
 
 /// Reading time in minutes from number of words, assumes 180 wpm reading speed from a device
+#[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 fn reading_time_from_words(words: u32) -> u32 {
-    let result = (words as f64 / 180.0).round();
+    let result = (f64::from(words) / 180.0).round();
     if result > 0.0 {
         result as u32
     } else {
@@ -113,32 +113,29 @@ pub fn parse_markdown_to_html(
     let mut parsing_heading = false;
     let mut word_count: u32 = 0;
 
-    let heading_parser = Parser::new_ext(markdown, options).map(|event| {
-        match &event {
-            Event::Start(Tag::Heading(_level, _identifier, _classes)) => {
-                parsing_heading = true;
-            }
-            Event::Text(value) => {
-                word_count += words(value);
-                if parsing_heading {
-                    current_id_fragments.push_str(value);
-                }
-            }
-            Event::Code(value) => {
-                if parsing_heading {
-                    current_id_fragments.push_str(value);
-                }
-            }
-            Event::End(Tag::Heading(_level, _identifier, _classes)) => {
-                let heading = &current_id_fragments;
-                let id = slugified_title(&current_id_fragments);
-                headings.push(Heading::new(heading, &id));
-                current_id_fragments = String::new();
-                parsing_heading = false;
-            }
-            _ => {}
+    let heading_parser = Parser::new_ext(markdown, options).inspect(|event| match &event {
+        Event::Start(Tag::Heading(_level, _identifier, _classes)) => {
+            parsing_heading = true;
         }
-        event
+        Event::Text(value) => {
+            word_count += words(value);
+            if parsing_heading {
+                current_id_fragments.push_str(value);
+            }
+        }
+        Event::Code(value) => {
+            if parsing_heading {
+                current_id_fragments.push_str(value);
+            }
+        }
+        Event::End(Tag::Heading(_level, _identifier, _classes)) => {
+            let heading = &current_id_fragments;
+            let id = slugified_title(&current_id_fragments);
+            headings.push(Heading::new(heading, &id));
+            current_id_fragments = String::new();
+            parsing_heading = false;
+        }
+        _ => {}
     });
     html::write_html(Cursor::new(&mut bytes), heading_parser)?;
     let reading_time = reading_time_from_words(word_count);
@@ -153,7 +150,7 @@ pub fn parse_markdown_to_html(
             let heading_identifier = heading_iterator.next();
             Event::Start(Tag::Heading(
                 *level,
-                heading_identifier.map(|x| x.id()),
+                heading_identifier.map(Heading::id),
                 Vec::new(),
             ))
         }
@@ -161,7 +158,7 @@ pub fn parse_markdown_to_html(
     });
 
     match html::write_html(Cursor::new(&mut bytes), parser) {
-        Ok(_) => Ok((
+        Ok(()) => Ok((
             String::from_utf8_lossy(&bytes).to_string(),
             headings,
             statistics,
@@ -221,7 +218,7 @@ fn html_tag(html: &str) -> Result<(HTMLElementEvent, &str), Box<dyn std::error::
             }
             Ok((event, tag_name))
         }
-        Err(error) => Err(format!("{:?}", error).into()),
+        Err(error) => Err(format!("{error:?}").into()),
     }
 }
 
@@ -275,7 +272,7 @@ where
     #[inline]
     fn write(&mut self) -> io::Result<()> {
         let lines = wrap(&self.current_line, self.line_length);
-        for line in lines.iter() {
+        for line in &lines {
             self.writer.write_str(line)?;
             self.writer.write_str("\n")?;
         }
@@ -296,11 +293,7 @@ where
                 End(tag) => {
                     self.end_tag(tag)?;
                 }
-                Text(text) => {
-                    self.current_line.push_str(&text);
-                    self.end_newline = text.ends_with('\n');
-                }
-                Code(text) => {
+                Text(text) | Code(text) => {
                     self.current_line.push_str(&text);
                     self.end_newline = text.ends_with('\n');
                 }
@@ -336,10 +329,10 @@ where
     fn start_tag(&mut self, tag: Tag) -> io::Result<()> {
         match tag {
             Tag::Paragraph => {
-                if !self.end_newline {
-                    self.write()
-                } else {
+                if self.end_newline {
                     Ok(())
+                } else {
+                    self.write()
                 }
             }
             Tag::Heading(_level, _id, _classes) => {
@@ -427,19 +420,19 @@ impl<'a> ParseMarkdownOptions<'a> {
     }
 }
 
-pub fn parse_markdown_to_plaintext(markdown: &str, options: ParseMarkdownOptions) -> String {
+pub fn parse_markdown_to_plaintext(markdown: &str, options: &ParseMarkdownOptions) -> String {
     let ParseMarkdownOptions {
         canonical_root_url,
         enable_smart_punctuation,
     } = options;
 
     let mut parser_options = Options::empty();
-    if enable_smart_punctuation {
+    if *enable_smart_punctuation {
         parser_options.insert(Options::ENABLE_SMART_PUNCTUATION);
     }
     let parser = Parser::new_ext(markdown, parser_options);
 
     let mut plaintext_buf = String::new();
-    push_plaintext(&mut plaintext_buf, parser, canonical_root_url);
+    push_plaintext(&mut plaintext_buf, parser, *canonical_root_url);
     plaintext_buf
 }
