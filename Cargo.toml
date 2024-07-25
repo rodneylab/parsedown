@@ -21,7 +21,7 @@ opt-level = "z"
 [dependencies]
 aho-corasick = "1.1.2"
 deunicode = "1.4.4"
-getrandom = { version = "0.2.14", features = ["js"] }
+getrandom = { version = "0.2.15", features = ["js"] }
 html5ever = "0.26.0"
 js-sys = "0.3.69"
 mrml = { version = "1.2.11", features = ["parse", "render"], default-features = false }
