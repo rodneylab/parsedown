@@ -125,7 +125,7 @@ pub fn mjml_to_html(mjml: &str) -> String {
             return String::new();
         }
     };
-    let opts = mrml::prelude::render::Options::default();
+    let opts = mrml::prelude::render::RenderOptions::default();
     match root.render(&opts) {
         Ok(value) => value,
         Err(error) => {
@@ -141,13 +141,13 @@ mod tests {
 
     #[test]
     fn test_markdown_to_html() {
-        let markdown = r#"
+        let markdown = r"
 hello you
 =========
 
 * alpha
 * beta
-"#;
+";
 
         let result = markdown_to_processed_html(
             markdown,
@@ -261,7 +261,7 @@ p { display: block; margin: 13px 0; }
 .mj-outlook-group-fix { width:100% !important; }
 </style>
 <![endif]-->
-</head><body></body></html>"#;
+<style type="text/css"></style></head><body></body></html>"#;
         assert_eq!(result, expected);
     }
 }

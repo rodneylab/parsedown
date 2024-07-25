@@ -27,11 +27,11 @@ Deno.test("it parses markdown to html", async () => {
   assertEquals(headings!.length, 1);
   assertEquals(headings![0], {
     heading: "👋🏽 Hello You",
-    id: "wave-skin-tone-4-hello-you",
+    id: "wave-hello-you",
   });
   assertEquals(
     html,
-    `<h2 id="wave-skin-tone-4-hello-you">👋🏽 Hello You <a href="#wave-skin-tone-4-hello-you" class="heading-anchor">#</a></h2>
+    `<h2 id="wave-hello-you">👋🏽 Hello You <a href="#wave-hello-you" class="heading-anchor">#</a></h2>
 <ul>
 <li>alpha</li>
 <li>beta</li>
@@ -122,6 +122,6 @@ p { display: block; margin: 13px 0; }
 .mj-outlook-group-fix { width:100% !important; }
 </style>
 <![endif]-->
-</head><body></body></html>`,
+<style type="text/css"></style></head><body></body></html>`,
   );
 });
