@@ -312,7 +312,7 @@ impl TreeSink for RcDom {
         let mut existing = if let NodeData::Element { ref attrs, .. } = target.data {
             attrs.borrow_mut()
         } else {
-            panic!("not an elemet")
+            panic!("not an element")
         };
 
         let existing_names = existing
