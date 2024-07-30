@@ -9,6 +9,23 @@ on:
       - main
 permissions: read-all
 jobs:
+  # wasm-check:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Harden Runner
+  #       uses: step-security/harden-runner@0d381219ddf674d61a7572ddd19d7941e271515c # v2.9.0
+  #       with:
+  #         egress-policy: audit
+  #         disable-telemetry: true
+  #     - name: Clone repository
+  #       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+  #     - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
+  #     - name: Install Deno
+  #       uses: denoland/setup-deno@ba9dcf3bc3696623d1add6a2f5181ee1b5143de5 # v1.3.0
+  #       with:
+  #         deno-version: v1.x
+  #     - name: Check Wasm up-to-date
+  #       run: deno task wasmbuild --check
   deno-check:
     runs-on: ubuntu-latest
     steps:

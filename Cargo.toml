@@ -10,7 +10,7 @@ rust-version = "1.73"
 description = "Markdown processing"
 
 [lib]
-crate_type = ["cdylib"]
+crate-type = ["cdylib"]
 
 [profile.release]
 codegen-units = 1
