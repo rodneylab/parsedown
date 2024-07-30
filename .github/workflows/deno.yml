@@ -19,6 +19,7 @@ jobs:
           disable-telemetry: true
       - name: Clone repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
       - name: Install Deno
         uses: denoland/setup-deno@ba9dcf3bc3696623d1add6a2f5181ee1b5143de5 # v1.3.0
         with:
