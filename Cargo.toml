@@ -32,4 +32,4 @@ serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.1"
 thiserror = "1.0.63"
 url = "2.5.0"
-wasm-bindgen = { version = "=0.2.92", features = ["serde-serialize"] }
+wasm-bindgen = { version = "=0.2.93", features = ["serde-serialize"] }
