@@ -21,7 +21,7 @@ jobs:
   #       uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
   #     - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
   #     - name: Install Deno
-  #       uses: denoland/setup-deno@916edb9a40fd86d1ff57b758807ebe57242f7407 # v1.4.0
+  #       uses: denoland/setup-deno@fa660b328d065f7683e7303976bd81e2d58e98ae # v1.4.1
   #       with:
   #         deno-version: v1.x
   #     - name: Check Wasm up-to-date
@@ -37,7 +37,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Install Deno
-        uses: denoland/setup-deno@916edb9a40fd86d1ff57b758807ebe57242f7407 # v1.4.0
+        uses: denoland/setup-deno@fa660b328d065f7683e7303976bd81e2d58e98ae # v1.4.1
         with:
           deno-version: v1.x
       - name: Check formatting
@@ -57,7 +57,7 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - name: Install Deno
-        uses: denoland/setup-deno@916edb9a40fd86d1ff57b758807ebe57242f7407 # v1.4.0
+        uses: denoland/setup-deno@fa660b328d065f7683e7303976bd81e2d58e98ae # v1.4.1
         with:
           deno-version: v1.x
       - name: Test Modules
