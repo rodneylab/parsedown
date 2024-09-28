@@ -24,7 +24,7 @@ jobs:
           disable-telemetry: true
       - name: Install Linux Dependencies
         run: sudo apt-get update
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
       - name: Run tests
         run: cargo test
@@ -37,7 +37,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
         with:
           components: rustfmt
@@ -50,7 +50,7 @@ jobs:
         uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
         with:
           egress-policy: audit
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: dprint/check@2f1cf31537886c3bfb05591c031f7744e48ba8a1 # v2.2
   clippy:
     name: Clippy
@@ -61,7 +61,7 @@ jobs:
         with:
           egress-policy: audit
           disable-telemetry: true
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
         with:
           components: clippy
@@ -74,7 +74,7 @@ jobs:
         msrv: ["1.60.0"] # instrument-coverage flag requires Rust 1.60
     name: ubuntu / ${{ matrix.msrv }}
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - name: Install Linux Dependencies
         run: sudo apt-get update
       - name: Install ${{ matrix.msrv }}
@@ -95,7 +95,7 @@ jobs:
       - name: Install Linux Dependencies
         run: sudo apt-get update
       - name: Checkout repository
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
       - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
         with:
           components: llvm-tools-preview
