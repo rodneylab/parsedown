@@ -78,7 +78,7 @@ jobs:
       - name: Install Linux Dependencies
         run: sudo apt-get update
       - name: Install ${{ matrix.msrv }}
-      - uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
+        uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
         with:
           toolchain: ${{ matrix.msrv }}
       - name: cargo +${{ matrix.msrv }} check
