@@ -25,7 +25,7 @@ jobs:
       - name: Install Linux Dependencies
         run: sudo apt-get update
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
+      - uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
       - name: Run tests
         run: cargo test
   fmt:
@@ -38,7 +38,7 @@ jobs:
           egress-policy: audit
           disable-telemetry: true
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
+      - uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
         with:
           components: rustfmt
       - name: Enforce formatting
@@ -62,7 +62,7 @@ jobs:
           egress-policy: audit
           disable-telemetry: true
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
+      - uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
         with:
           components: clippy
       - name: Linting
@@ -78,7 +78,7 @@ jobs:
       - name: Install Linux Dependencies
         run: sudo apt-get update
       - name: Install ${{ matrix.msrv }}
-        uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
+        uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
         with:
           toolchain: ${{ matrix.msrv }}
       - name: cargo +${{ matrix.msrv }} check
@@ -96,7 +96,7 @@ jobs:
         run: sudo apt-get update
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - uses: dtolnay/rust-toolchain@4f366e621dc8fa63f557ca04b8f4361824a35a45 # stable
+      - uses: dtolnay/rust-toolchain@ed2356ad628626a6b3f5be6c3e0255c0454fcdb9 # stable
         with:
           components: llvm-tools-preview
       - name: Install grcov
