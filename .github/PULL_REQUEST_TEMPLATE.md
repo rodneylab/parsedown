@@ -16,6 +16,7 @@ Please delete options that are not relevant.
       not work as expected)
 - [ ] This change requires a documentation update
 - [ ] Dependency update
+- [ ] CI
 
 # How Has This Been Tested?
 
