@@ -135,7 +135,7 @@ pub fn parse_markdown_to_html(
         }
         _ => {}
     });
-    html::write_html(Cursor::new(&mut bytes), heading_parser)?;
+    html::write_html_io(Cursor::new(&mut bytes), heading_parser)?;
     let reading_time = reading_time_from_words(word_count);
     let statistics = TextStatistics {
         reading_time,
@@ -156,7 +156,7 @@ pub fn parse_markdown_to_html(
         _ => event,
     });
 
-    match html::write_html(Cursor::new(&mut bytes), parser) {
+    match html::write_html_io(Cursor::new(&mut bytes), parser) {
         Ok(()) => Ok((
             String::from_utf8_lossy(&bytes).to_string(),
             headings,

@@ -1,5 +1,9 @@
 {
+  "fmt": {
+    "exclude": [".github/"]
+  },
   "tasks": {
+    "check": "deno fmt --check && deno lint && deno check **/*.ts",
     "test": "deno test -A",
     "wasmbuild": "deno run -A jsr:@deno/wasmbuild@0.17.3 --project=parsedown"
   },
