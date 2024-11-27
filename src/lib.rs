@@ -1,8 +1,10 @@
 #![warn(clippy::all, clippy::pedantic)]
 
 mod html_process;
+mod inline_html;
 mod markdown;
 mod url_utility;
+mod utilities;
 
 use html_process::process_html;
 use markdown::{
