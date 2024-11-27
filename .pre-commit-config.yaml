@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v3.31.0
+    rev: v4.0.0
     hooks:
       - id: commitizen
         stages:
@@ -30,3 +30,8 @@ repos:
       - id: check-json
         exclude: .vscode
       - id: no-commit-to-branch
+  - repo: https://github.com/EmbarkStudios/cargo-deny
+    rev: 0.16.2
+    hooks:
+      - id: cargo-deny
+        args: ["--all-features", "check"]
