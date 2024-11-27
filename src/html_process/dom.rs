@@ -158,7 +158,10 @@ impl TreeSink for RcDom {
     fn finish(self) -> Self {
         self
     }
+
     type Handle = Handle;
+
+    type ElemName<'a>=ExpandedName<'a> where Self: 'a;
 
     fn parse_error(&self, msg: Cow<'static, str>) {
         self.errors.borrow_mut().push(msg);
