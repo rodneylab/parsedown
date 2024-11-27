@@ -175,11 +175,11 @@ hello you
             }
         );
 
-        let markdown = r#"
+        let markdown = "
 ## Subheading
 
 Paragraph text.
-"#;
+";
 
         let result = markdown_to_processed_html(
             markdown,
@@ -204,11 +204,11 @@ Paragraph text.
             },
         );
 
-        let markdown = r#"
+        let markdown = "
 ### Subheading
 
 Link: [Example site](https://example.com).
-"#;
+";
 
         let result = markdown_to_processed_html(
             markdown,
@@ -219,9 +219,9 @@ Link: [Example site](https://example.com).
             },
         );
         let html = Some(String::from(
-            r##"<h3 id="subheading">Subheading</h3>
+            r#"<h3 id="subheading">Subheading</h3>
 <p>Link: <a href="https://example.com" target="_blank" rel="nofollow noopener noreferrer">Example site</a>.</p>
-"##,
+"#,
         ));
         assert_eq!(
             result,
@@ -236,7 +236,7 @@ Link: [Example site](https://example.com).
 
     #[test]
     fn test_mjml_to_html() {
-        let mjml = r#"<mjml></mjml>"#;
+        let mjml = r"<mjml></mjml>";
         let result = mjml_to_html(mjml);
         let expected = r#"<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">

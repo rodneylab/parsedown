@@ -90,12 +90,12 @@ fn search_html_matches_on_multiple_terms() {
 #[test]
 fn search_html_highlight_does_nothing_when_there_are_no_matches() {
     let result = process_html(
-        r#"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p>"#,
+        "<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p>",
         None,
         Some("nonsense"),
     )
     .to_string();
     let expected =
-        r#"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p>"#;
+        "<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p>";
     assert_eq!(result, expected);
 }
