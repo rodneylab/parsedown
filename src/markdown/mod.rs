@@ -1,25 +1,23 @@
 #[cfg(test)]
 mod tests;
 
-use crate::url_utility::relative_url;
+use std::io::{self, Cursor};
 
 use deunicode::deunicode;
-use nom::{
-    branch::alt,
-    bytes::complete::{is_not, tag},
-    character::complete::multispace0,
-    sequence::{delimited, pair},
-    IResult,
-};
 use pulldown_cmark::{
-    escape::StrWrite,
-    html,
-    Event::{self, Code, End, Html, SoftBreak, Start, Text},
-    Options, Parser, Tag,
+    html, CowStr,
+    Event::{self, Code, End, InlineHtml, SoftBreak, Start, Text},
+    Options, Parser, Tag, TagEnd,
 };
+use pulldown_cmark_escape::StrWrite;
 use serde::Serialize;
-use std::io::{self, Cursor};
 use textwrap::wrap;
+
+use crate::{
+    inline_html::{parse_node as parse_inline_html_node, InlineHTMLTagType},
+    url_utility::relative_url,
+    utilities::stack::Stack,
+};
 
 /// Reading time in minutes from number of words, assumes 180 wpm reading speed from a device
 #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
@@ -114,7 +112,7 @@ pub fn parse_markdown_to_html(
     let mut word_count: u32 = 0;
 
     let heading_parser = Parser::new_ext(markdown, options).inspect(|event| match &event {
-        Event::Start(Tag::Heading(_level, _identifier, _classes)) => {
+        Event::Start(Tag::Heading { .. }) => {
             parsing_heading = true;
         }
         Event::Text(value) => {
@@ -128,7 +126,7 @@ pub fn parse_markdown_to_html(
                 current_id_fragments.push_str(value);
             }
         }
-        Event::End(Tag::Heading(_level, _identifier, _classes)) => {
+        Event::End(TagEnd::Heading(_heading_level)) => {
             let heading = &current_id_fragments;
             let id = slugified_title(&current_id_fragments);
             headings.push(Heading::new(heading, &id));
@@ -146,13 +144,14 @@ pub fn parse_markdown_to_html(
 
     let mut heading_iterator = headings.iter();
     let parser = Parser::new_ext(markdown, options).map(|event| match &event {
-        Event::Start(Tag::Heading(level, _identifiers, _classes)) => {
+        Event::Start(Tag::Heading { level, .. }) => {
             let heading_identifier = heading_iterator.next();
-            Event::Start(Tag::Heading(
-                *level,
-                heading_identifier.map(Heading::id),
-                Vec::new(),
-            ))
+            Event::Start(Tag::Heading {
+                level: *level,
+                id: heading_identifier.map(|val| CowStr::from(val.id())),
+                classes: Vec::new(),
+                attrs: Vec::new(),
+            })
         }
         _ => event,
     });
@@ -164,61 +163,6 @@ pub fn parse_markdown_to_html(
             statistics,
         )),
         Err(error) => Err(error),
-    }
-}
-
-enum HTMLElementEvent {
-    Start,
-    End,
-}
-
-fn is_html_tag_name_start(character: char) -> bool {
-    character.is_alphabetic() || character == '_'
-}
-fn is_html_tag_name(character: char) -> bool {
-    is_html_tag_name_start(character) || character.is_ascii_digit() || "-.".contains(character)
-}
-
-fn parse_html_tag_content(line: &str) -> IResult<&str, &str> {
-    let (rest, tag_content) = is_not(">/")(line)?;
-    let (_attributes, (tag_name, _space)) = pair(is_not(" "), multispace0)(tag_content)?;
-    Ok((rest, tag_name))
-}
-
-fn parse_closing_html_tag(line: &str) -> IResult<&str, (HTMLElementEvent, &str)> {
-    let (rest, tag_name) = delimited(tag("</"), parse_html_tag_content, tag(">"))(line)?;
-    Ok((rest, (HTMLElementEvent::End, tag_name)))
-}
-
-fn parse_opening_html_tag(line: &str) -> IResult<&str, (HTMLElementEvent, &str)> {
-    let (rest, tag_name) = delimited(tag("<"), parse_html_tag_content, tag(">"))(line)?;
-    Ok((rest, (HTMLElementEvent::Start, tag_name)))
-}
-
-fn html_tag(html: &str) -> Result<(HTMLElementEvent, &str), Box<dyn std::error::Error>> {
-    match alt((parse_opening_html_tag, parse_closing_html_tag))(html) {
-        Ok((_rest, (event, tag_name))) => {
-            // check the HTML tag name is valid
-            /* todo(rodneylab): check if it is possible to receive an invalid closing or opening
-             * tag name
-             */
-            let mut character_iter = tag_name.chars();
-            if let Some(value) = character_iter.next() {
-                if !is_html_tag_name_start(value) {
-                    return Err(format!("Invalid HTML element name: {tag_name}").into());
-                }
-            } else {
-                // todo(rodneylab): check if this can happen - might be able to remove arm
-                return Err(format!("Invalid HTML element name: {tag_name}").into());
-            }
-            for character in character_iter {
-                if !is_html_tag_name(character) {
-                    return Err(format!("Invalid HTML element name: {tag_name}").into());
-                }
-            }
-            Ok((event, tag_name))
-        }
-        Err(error) => Err(format!("{error:?}").into()),
     }
 }
 
@@ -234,6 +178,8 @@ struct PlaintextWriter<'a, I, W> {
 
     /// Buffer of words in current line of input, gets wrapped to preferred length before output
     current_line: String,
+
+    current_link: Option<String>,
 
     /// Preferred length of wrapped out lines, currently fixed at 72
     line_length: usize,
@@ -256,6 +202,7 @@ where
             writer,
             end_newline: true,
             current_line: String::new(),
+            current_link: None,
             line_length: 72,
             ignore_tags: vec!["tool-tip"],
             canonical_root_url,
@@ -297,25 +244,35 @@ where
                     self.current_line.push_str(&text);
                     self.end_newline = text.ends_with('\n');
                 }
-                Html(html) => match html_tag(&html) {
-                    Ok((HTMLElementEvent::Start, tag_name_value)) => {
-                        if self.ignore_tags.contains(&tag_name_value) {
+                InlineHtml(inline_html) => {
+                    if let Some(InlineHTMLTagType::Opening(value)) =
+                        parse_inline_html_node(&inline_html)
+                    {
+                        if self.ignore_tags.contains(&value.as_ref()) {
+                            let mut open_tags: Stack<String> = Stack::new();
+                            open_tags.push(value);
                             for html_event in self.iter.by_ref() {
-                                if let Html(html_value) = html_event {
-                                    if let Ok((HTMLElementEvent::End, end_tag_name_value)) =
-                                        html_tag(&html_value)
-                                    {
-                                        if end_tag_name_value == tag_name_value {
-                                            break;
+                                if let InlineHtml(nested_inline_html) = html_event {
+                                    match parse_inline_html_node(&nested_inline_html) {
+                                        Some(InlineHTMLTagType::Opening(open_tag_value)) => {
+                                            open_tags.push(open_tag_value);
                                         }
+                                        Some(InlineHTMLTagType::Closing(closing_tag_value)) => {
+                                            if let Some(popped_value) = open_tags.pop() {
+                                                if popped_value == closing_tag_value
+                                                    && open_tags.is_empty()
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        None => {}
                                     }
                                 }
                             }
                         }
                     }
-                    Ok((_event, _tag_name)) => {}
-                    Err(_) => {}
-                },
+                }
                 SoftBreak => {
                     self.current_line.push(' ');
                 }
@@ -335,7 +292,7 @@ where
                     self.write()
                 }
             }
-            Tag::Heading(_level, _id, _classes) => {
+            Tag::Heading { .. } => {
                 if self.end_newline {
                     self.end_newline = false;
                     Ok(())
@@ -352,31 +309,36 @@ where
                 }
                 Ok(())
             }
+            Tag::Link { dest_url, .. } => {
+                self.current_link = Some(dest_url.to_string());
+                Ok(())
+            }
             _ => Ok(()),
         }
     }
 
-    fn end_tag(&mut self, tag: Tag) -> io::Result<()> {
+    fn end_tag(&mut self, tag: TagEnd) -> io::Result<()> {
         match tag {
-            Tag::Paragraph => {
+            TagEnd::Paragraph => {
                 self.write()?;
             }
-            Tag::Heading(_level, _id, _classes) => {
+            TagEnd::Heading(_level) => {
                 self.write()?;
             }
-            Tag::Item => {
+            TagEnd::Item => {
                 self.write()?;
             }
-            Tag::Link(_link_type, dest, _title) => {
-                self.current_line.push_str(" (");
-                if let Some(root_url_value) = self.canonical_root_url {
-                    if relative_url(&dest) {
-                        self.current_line.push_str(root_url_value);
+            TagEnd::Link => {
+                if let Some(value) = &self.current_link {
+                    self.current_line.push_str(" (");
+                    if let Some(root_url_value) = self.canonical_root_url {
+                        if relative_url(value) {
+                            self.current_line.push_str(root_url_value);
+                        }
                     }
+                    self.current_line.push_str(value);
+                    self.current_line.push(')');
                 }
-                self.current_line.push_str(&dest);
-
-                self.current_line.push(')');
             }
             _ => {}
         }
