@@ -1,3 +1,8 @@
+/**
+ * WASM functions for processing Markdown text and MJML, written in Rust.  See REAMDE.md for
+ * examples.
+ */
+
 import { instantiate } from "./lib/parsedown.generated.js";
 
 interface MarkdownToHtmlOKOutput {
@@ -25,6 +30,16 @@ interface MarkdownToHtmlOptions {
 
 type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
 
+/**
+ * Convert the, input, `markdown` string to HTML using a [CommonMark](https://commonmark.org/)
+ * Markdown Parser
+ *
+ * @param markdown The Markdown text to parse
+ * @param options.enableSmartPunctuation `true` if "something" should be replaced with
+ *                                       “something”, etc.
+ * @returns `markdown` parsed into HTML as an object or an error object.  If successful, the HTML is
+ *           in the `.html` field of the returnd object.
+ */
 const markdownToHtml: (
   markdown: string,
   options?: MarkdownToHtmlOptions,
@@ -46,6 +61,13 @@ const markdownToHtml: (
     });
   };
 
+/**
+ * Convert the, input, `markdown` string to plaintext, to use, for example in a broadcast email or
+ * RSS feed
+ *
+ * @param markdown The Markdown text to parse
+ * @returns `markdown` parsed into a plaintext string
+ */
 const markdownToPlaintext: (
   markdown: string,
   options?: MarkdownToPlaintextOptions,
@@ -62,6 +84,12 @@ const markdownToPlaintext: (
   });
 };
 
+/**
+ * Convert the, input, `mjml` string to HTML, for use in a broadcast email, for example
+ *
+ * @param markdown The Markdown text to parse
+ * @returns `markdown` parsed into a plaintext string
+ */
 const mjmlToHtml: (mjml: string) => Promise<string> = async function mjmlToHtml(
   mjml,
 ) {
