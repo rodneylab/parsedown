@@ -26,7 +26,14 @@
 mod tests;
 
 mod dom;
-use crate::url_utility::relative_url;
+
+use std::{
+    cell::RefCell,
+    fmt::{self, Display},
+    mem,
+    rc::Rc,
+};
+
 use aho_corasick::AhoCorasickBuilder;
 use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 use html5ever::{
@@ -37,12 +44,8 @@ use html5ever::{
     tendril::{format_tendril, StrTendril, TendrilSink},
     Attribute, QualName,
 };
-use std::{
-    cell::RefCell,
-    fmt::{self, Display},
-    mem,
-    rc::Rc,
-};
+
+use crate::url_utility::relative_url;
 
 #[derive(Debug)]
 pub struct Builder<'a> {
