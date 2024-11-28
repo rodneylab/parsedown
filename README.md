@@ -29,7 +29,7 @@ import {
   markdownToHtml,
   markdownToPlaintext,
   mjmlToHtml,
-} from "https://deno.land/x/parsedown@1.4.1/mod.ts";
+} from "https://deno.land/x/parsedown@1.4.2/mod.ts";
 
 const { errors, headings, html, statistics } = await markdownToHtml(
   `
@@ -83,7 +83,7 @@ import {
   markdownToHtml,
   markdownToPlaintext,
   mjmlToHtml,
-} from "https://deno.land/x/parsedown@1.4.1/mod.ts";
+} from "https://deno.land/x/parsedown@1.4.2/mod.ts";
 
 const plaintext = await markdownToPlaintext(
   `
@@ -116,7 +116,7 @@ import {
   markdownToHtml,
   markdownToPlaintext,
   mjmlToHtml,
-} from "https://deno.land/x/parsedown@1.4.1/mod.ts";
+} from "https://deno.land/x/parsedown@1.4.2/mod.ts";
 
 const html = await mjmlToHtml("<mjml></mjml>");
 

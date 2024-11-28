@@ -1,3 +1,9 @@
+## 1.4.2 (2024-11-28)
+
+### Fix
+
+- **rust-dependencies**: ⛔️ update cargo deny licenses
+
 ## 1.4.1 (2023-04-03)
 
 ### Fix
