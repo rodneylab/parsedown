@@ -1,5 +1,5 @@
 /**
- * WASM functions for processing Markdown text and MJML, written in Rust.  See REAMDE.md for
+ * WASM functions for processing Markdown text and MJML, written in Rust.  See README.md for
  * examples.
  */
 
