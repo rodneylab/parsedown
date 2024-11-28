@@ -8,6 +8,14 @@
  * except according to those terms.
  */
 
+use std::{
+    borrow::Cow,
+    cell::{Cell, RefCell},
+    collections::{HashSet, VecDeque},
+    fmt, io, mem,
+    rc::{Rc, Weak},
+};
+
 use html5ever::{
     interface::tree_builder::{self, ElementFlags, NodeOrText, QuirksMode, TreeSink},
     serialize::{
@@ -16,13 +24,6 @@ use html5ever::{
     },
     tendril::StrTendril,
     Attribute, ExpandedName, QualName,
-};
-use std::{
-    borrow::Cow,
-    cell::{Cell, RefCell},
-    collections::{HashSet, VecDeque},
-    fmt, io, mem,
-    rc::{Rc, Weak},
 };
 
 #[derive(Debug)]

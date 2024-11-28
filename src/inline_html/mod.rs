@@ -12,7 +12,6 @@ use nom::{
 #[non_exhaustive]
 pub enum InlineHTMLTagType {
     Opening(String),
-    //SelfClosing,
     Closing(String),
 }
 

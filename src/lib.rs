@@ -6,13 +6,16 @@ mod markdown;
 mod url_utility;
 mod utilities;
 
-use html_process::process_html;
-use markdown::{
-    parse_markdown_to_html, parse_markdown_to_plaintext, Heading, ParseMarkdownOptions,
-    TextStatistics,
-};
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::{prelude::*, JsValue};
+
+use crate::{
+    html_process::process_html,
+    markdown::{
+        parse_markdown_to_html, parse_markdown_to_plaintext, Heading, ParseMarkdownOptions,
+        TextStatistics,
+    },
+};
 
 #[wasm_bindgen]
 extern "C" {
