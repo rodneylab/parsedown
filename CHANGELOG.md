@@ -1,3 +1,9 @@
+## 1.4.2 (2024-11-28)
+
+### Fix
+
+- **rust-dependencies**: ⛔️ update cargo deny licenses
+
 ## 1.4.1 (2023-04-03)
 
 ### Fix
@@ -19,8 +25,8 @@
 
 - **dependencies**: 💫 update crates
 - 💫 update LICENSE
-- accept input canonical base url parameters to allow conversion of relative
-  URLs to absolute ones
+- accept input canonical base url parameters to allow converion of relative URLs
+  to absolute ones
 - 💫 add target blank to non relative anchor tags
 
 ## 1.0.0 (2022-12-23)
