@@ -25,7 +25,7 @@
 
 - **dependencies**: 💫 update crates
 - 💫 update LICENSE
-- accept input canonical base url parameters to allow converion of relative URLs
+- accept input canonical base url parameters to allow conversion of relative URLs
   to absolute ones
 - 💫 add target blank to non relative anchor tags
 
