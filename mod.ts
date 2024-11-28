@@ -38,7 +38,7 @@ type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
  * @param options.enableSmartPunctuation `true` if "something" should be replaced with
  *                                       “something”, etc.
  * @returns `markdown` parsed into HTML as an object or an error object.  If successful, the HTML is
- *           in the `.html` field of the returnd object.
+ *           in the `.html` field of the returned object.
  */
 const markdownToHtml: (
   markdown: string,
