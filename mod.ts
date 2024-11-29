@@ -32,7 +32,7 @@ type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
 
 /**
  * Convert the, input, `markdown` string to HTML using a [CommonMark](https://commonmark.org/)
- * Markdown Parser
+ * Markdown Parser.
  *
  * @param markdown The Markdown text to parse
  * @param options.enableSmartPunctuation `true` if "something" should be replaced with
@@ -63,7 +63,7 @@ const markdownToHtml: (
 
 /**
  * Convert the, input, `markdown` string to plaintext, to use, for example in a broadcast email or
- * RSS feed
+ * RSS feed.
  *
  * @param markdown The Markdown text to parse
  * @returns `markdown` parsed into a plaintext string
@@ -85,7 +85,7 @@ const markdownToPlaintext: (
 };
 
 /**
- * Convert the, input, `mjml` string to HTML, for use in a broadcast email, for example
+ * Convert the, input, `mjml` string to HTML, for use in a broadcast email, for example.
  *
  * @param markdown The Markdown text to parse
  * @returns `markdown` parsed into a plaintext string
