@@ -361,7 +361,7 @@ pub struct ParseMarkdownOptions<'a> {
     enable_smart_punctuation: bool,
 }
 
-impl<'a> Default for ParseMarkdownOptions<'a> {
+impl Default for ParseMarkdownOptions<'_> {
     fn default() -> Self {
         ParseMarkdownOptions {
             canonical_root_url: None,

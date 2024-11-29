@@ -55,7 +55,7 @@ pub struct Builder<'a> {
     search_term: Option<&'a str>,
 }
 
-impl<'a> Default for Builder<'a> {
+impl Default for Builder<'_> {
     fn default() -> Self {
         Builder {
             canonical_root_url: None,
@@ -152,6 +152,7 @@ impl<'a> Builder<'a> {
         self.process_dom(dom)
     }
 
+    #[expect(clippy::ref_option)]
     fn adjust_node_attributes(
         &self,
         child: &mut Handle,
