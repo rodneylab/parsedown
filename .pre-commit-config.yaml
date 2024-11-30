@@ -31,7 +31,7 @@ repos:
         exclude: .vscode
       - id: no-commit-to-branch
   - repo: https://github.com/EmbarkStudios/cargo-deny
-    rev: 0.16.2
+    rev: 0.16.3
     hooks:
       - id: cargo-deny
         args: ["--all-features", "check"]
