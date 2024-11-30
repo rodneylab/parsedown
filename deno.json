@@ -4,7 +4,13 @@
   "license": "BSD-3-Clause",
   "exports": "./mod.ts",
   "fmt": {
-    "exclude": [".github/"]
+    "exclude": [
+      ".github/",
+      ".prettierrc.mjs",
+      "pnpm-lock.yaml",
+      "node_modules/",
+      "test/"
+    ]
   },
   "test": {
     "exclude": ["test/"]
