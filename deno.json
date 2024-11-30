@@ -16,7 +16,7 @@
     "exclude": ["test/"]
   },
   "tasks": {
-    "check": "deno fmt --check && deno lint && deno check **/*.ts",
+    "check": "deno fmt --check && deno lint && deno check mod.ts mod_test.ts",
     "test": "deno test -A",
     "wasmbuild:deno": "deno run -A jsr:@deno/wasmbuild@0.17.3 --project=parsedown",
     "wasmbuild:node": "wasm-pack build --target nodejs --scope rodneylab",

@@ -14,7 +14,7 @@
   "scripts": {
     "build": "wasm-pack build --target nodejs --scope rodneylab",
     "format": "prettier --write './**/*.ts'",
-    "prettier:check": "prettier --check './**/*.ts'",
+    "check:formatting": "prettier --check './**/*.ts'",
     "test": "vitest run",
     "test:watch": "vitest"
   },
