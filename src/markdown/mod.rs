@@ -194,7 +194,7 @@ struct PlaintextWriter<'a, I, W> {
 impl<'a, I, W> PlaintextWriter<'a, I, W>
 where
     I: Iterator<Item = Event<'a>>,
-    W: StrWrite,
+    W: StrWrite<Error = std::fmt::Error>,
 {
     fn new(iter: I, writer: W, canonical_root_url: Option<&'a str>) -> Self {
         Self {
@@ -210,14 +210,14 @@ where
     }
 
     /// Writes a new line.
-    fn write_newline(&mut self) -> io::Result<()> {
+    fn write_newline(&mut self) -> Result<(), std::fmt::Error> {
         self.end_newline = true;
         self.writer.write_str("\n")
     }
 
     /// Wraps the current line on input to preferred length and writes the wrapped lines
     #[inline]
-    fn write(&mut self) -> io::Result<()> {
+    fn write(&mut self) -> Result<(), std::fmt::Error> {
         let lines = wrap(&self.current_line, self.line_length);
         for line in &lines {
             self.writer.write_str(line)?;
@@ -231,7 +231,7 @@ where
         Ok(())
     }
 
-    fn run(mut self) -> io::Result<()> {
+    fn run(mut self) -> Result<(), std::fmt::Error> {
         while let Some(event) = self.iter.next() {
             match event {
                 Start(tag) => {
@@ -283,7 +283,7 @@ where
     }
 
     /// Handles the start of an HTML tag.
-    fn start_tag(&mut self, tag: Tag) -> io::Result<()> {
+    fn start_tag(&mut self, tag: Tag) -> Result<(), std::fmt::Error> {
         match tag {
             Tag::Paragraph => {
                 if self.end_newline {
@@ -317,7 +317,7 @@ where
         }
     }
 
-    fn end_tag(&mut self, tag: TagEnd) -> io::Result<()> {
+    fn end_tag(&mut self, tag: TagEnd) -> Result<(), std::fmt::Error> {
         match tag {
             TagEnd::Paragraph => {
                 self.write()?;
