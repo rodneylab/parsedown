@@ -27,6 +27,7 @@ test configuration
 
 - [ ] cargo test run with all tests passing
 - [ ] Deno tests run and passed
+- [ ] Vitest test run with all tests passing
 
 **Test Configuration**:
 

@@ -1,0 +1,35 @@
+name: Node
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+permissions: read-all
+jobs:
+  test:
+    name: Vite Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@eb238b55efaa70779f274895e782ed17c84f2895 # v2.6.1
+        with:
+          egress-policy: audit
+          disable-telemetry: true
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+        with:
+          version: 8
+      - name: Install Node dependencies
+        run: pnpm install
+      - name: Check Format
+        run: pnpm run check:formatting
+      - uses: dtolnay/rust-toolchain@4f647fc679bcd3b11499ccb42104547c83dabe96 # stable
+      - name: Run tests
+        run: cargo install wasm-pack
+      - name: Build WASM
+        run: pnpm build
+      - name: Run unit tests
+        run: pnpm test
