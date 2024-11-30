@@ -6,6 +6,9 @@
   "fmt": {
     "exclude": [".github/"]
   },
+  "test": {
+    "exclude": ["test/"]
+  },
   "tasks": {
     "check": "deno fmt --check && deno lint && deno check **/*.ts",
     "test": "deno test -A",
