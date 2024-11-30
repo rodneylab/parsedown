@@ -26,5 +26,11 @@ jobs:
         run: pnpm install
       - name: Check Format
         run: pnpm run check:formatting
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: dtolnay/rust-toolchain@4f647fc679bcd3b11499ccb42104547c83dabe96 # stable
+      - name: Run tests
+        run: cargo install wasm-pack
+      - name: Build WASM
+        run: pnpm build
       - name: Run unit tests
         run: pnpm test
