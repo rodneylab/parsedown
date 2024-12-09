@@ -35,9 +35,19 @@ type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
  * Markdown Parser.
  *
  * @param markdown The Markdown text to parse
- * @param options.enableSmartPunctuation `true` if "something" should be replaced with
- *                                       “something”, etc.
- * @returns `markdown` parsed into HTML as an object or an error object.  If successful, the HTML is
+ * @param {Object} [options={}] - Parse options
+ * @param {boolean} options.enableSmartPunctuation - `true` if "something" should be replaced with
+ *                                                   “something”, etc.
+ * @param {string} options.canonicalRootUrl - if included, relative url gain this value as a prefix
+ *                                            (`/home` becomes `https://example.com/home`)
+ * @param {string} options.searchTerm - if included, output HTML wraps any instances of this value
+ *                                      in `mark` tags (`A senctence with the-search-term` becomes
+ *                                      `A sentence with <mark>the-search-term</mark>`), for use in
+ *                                      highlighting search results, with CSS, for example.  The
+ *                                      first instance also has  `id=search-match` added the mark
+ *                                      tag.  You might use this to scroll the first match into view
+ *                                      automatically.
+ * @returns {Object} `markdown` parsed into HTML as an object or an error object.  If successful, the HTML is
  *           in the `.html` field of the returned object.
  */
 const markdownToHtml: (
