@@ -35,7 +35,7 @@ type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
  * Markdown Parser.
  *
  * @param markdown The Markdown text to parse
- * @param {Object} [options={}] - Parse options
+ * @param {MarkdownToHtmlOptions|undefined} [options={}] - Parse options
  * @param {boolean} options.enableSmartPunctuation - `true` if "something" should be replaced with
  *                                                   “something”, etc.
  * @param {string} options.canonicalRootUrl - if included, relative url gain this value as a prefix
@@ -47,27 +47,30 @@ type MarkdownToPlaintextOptions = Omit<MarkdownToHtmlOptions, "searchTerm">;
  *                                      first instance also has  `id=search-match` added the mark
  *                                      tag.  You might use this to scroll the first match into view
  *                                      automatically.
- * @returns {Object} `markdown` parsed into HTML as an object or an error object.  If successful, the HTML is
+ * @returns {Promise<MarkdownToHtmlOKOutput|MarkdownToHtmlErrorOutput>} `markdown` parsed into HTML as an object or an error object.  If successful, the HTML is
  *           in the `.html` field of the returned object.
  */
 const markdownToHtml: (
   markdown: string,
-  options?: MarkdownToHtmlOptions,
+  options: MarkdownToHtmlOptions | undefined,
 ) => Promise<MarkdownToHtmlOKOutput | MarkdownToHtmlErrorOutput> =
-  async function markdownToHtml(markdown, options) {
+  async function markdownToHtml(
+    markdown,
+    options: MarkdownToHtmlOptions | undefined,
+  ): Promise<MarkdownToHtmlOKOutput | MarkdownToHtmlErrorOutput> {
     const { markdown_to_html } = await instantiate();
-    const { canonicalRootUrl, enableSmartPunctuation, searchTerm } = options ??
-      {};
 
     return markdown_to_html(markdown, {
       enable_smart_punctuation: true,
-      ...(typeof canonicalRootUrl !== "undefined"
-        ? { canonical_root_url: canonicalRootUrl }
+      ...(typeof options?.canonicalRootUrl !== "undefined"
+        ? { canonical_root_url: options.canonicalRootUrl }
         : {}),
-      ...(typeof enableSmartPunctuation !== "undefined"
-        ? { enable_smart_punctuation: enableSmartPunctuation }
+      ...(typeof options?.enableSmartPunctuation !== "undefined"
+        ? { enable_smart_punctuation: options.enableSmartPunctuation }
         : {}),
-      ...(typeof searchTerm !== "undefined" ? { search_term: searchTerm } : {}),
+      ...(typeof options?.searchTerm !== "undefined"
+        ? { search_term: options.searchTerm }
+        : {}),
     });
   };
 
