@@ -12,11 +12,11 @@ repos:
       - id: cargo-check
       - id: clippy
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.21.2
+    rev: v8.23.0
     hooks:
       - id: gitleaks
   - repo: https://github.com/google/yamlfmt
-    rev: v0.14.0
+    rev: v0.15.0
     hooks:
       - id: yamlfmt
   - repo: https://github.com/pre-commit/pre-commit-hooks
