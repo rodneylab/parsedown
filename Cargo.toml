@@ -5,8 +5,8 @@ authors = ["Rodney Johnson <ask@rodneylab.com>"]
 edition = "2021"
 license = "BSD-3-Clause"
 repository = "https://github.com/rodneylab/parsedown"
-# js-sys v.0.3.69 requires rustc 1.73
-rust-version = "1.73"
+# wasm-bindgen v.0.2.93 requires rust 1.76
+rust-version = "1.76"
 description = "Markdown processing"
 
 [lib]
@@ -17,6 +17,9 @@ codegen-units = 1
 incremental = true
 lto = true
 opt-level = "z"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(wasm_bindgen_unstable_test_coverage)'] }
 
 [dependencies]
 aho-corasick = "1.1.3"
