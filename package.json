@@ -22,7 +22,7 @@
     "@rodneylab/parsedown": "link:pkg",
     "husky": "^9.1.7",
     "prettier": "^3.4.2",
-    "vitest": "^3.0.2"
+    "vitest": "^3.0.4"
   },
   "type": "module"
 }
