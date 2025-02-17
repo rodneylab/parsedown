@@ -29,7 +29,7 @@ html5ever = "0.29.0"
 js-sys = "0.3.72"
 mrml = { version = "4.0.1", features = ["parse", "render"], default-features = false }
 nom = { version = "8.0.0", features = ["alloc"] }
-pulldown-cmark = "0.12.2"
+pulldown-cmark = "0.13.0"
 pulldown-cmark-escape = "0.11.0"
 serde = { version = "1.0.217", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
