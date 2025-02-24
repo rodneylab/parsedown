@@ -21,7 +21,7 @@
   "devDependencies": {
     "@rodneylab/parsedown": "link:pkg",
     "husky": "^9.1.7",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "vitest": "^3.0.5"
   },
   "type": "module"
