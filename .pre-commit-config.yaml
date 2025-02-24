@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.2.1
+    rev: v4.2.2
     hooks:
       - id: commitizen
         stages:
@@ -12,7 +12,7 @@ repos:
       - id: cargo-check
       - id: clippy
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.23.3
+    rev: v8.24.0
     hooks:
       - id: gitleaks
   - repo: https://github.com/google/yamlfmt
@@ -31,7 +31,7 @@ repos:
         exclude: .vscode
       - id: no-commit-to-branch
   - repo: https://github.com/EmbarkStudios/cargo-deny
-    rev: 0.16.4
+    rev: 0.17.0
     hooks:
       - id: cargo-deny
         args: ["--all-features", "check"]
