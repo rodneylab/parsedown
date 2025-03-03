@@ -34,6 +34,6 @@ pulldown-cmark-escape = "0.11.0"
 serde = { version = "1.0.218", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.1"
-thiserror = "2.0.11"
+thiserror = "2.0.12"
 url = "2.5.4"
 wasm-bindgen = { version = "=0.2.100", features = ["serde-serialize"] }
