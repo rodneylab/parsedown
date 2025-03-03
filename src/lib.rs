@@ -131,7 +131,7 @@ pub fn mjml_to_html(mjml: &str) -> String {
         }
     };
     let opts = mrml::prelude::render::RenderOptions::default();
-    match root.render(&opts) {
+    match root.element.render(&opts) {
         Ok(value) => value,
         Err(error) => {
             console_log!("Error rendering parsed mjml to html: {:?}", error);
