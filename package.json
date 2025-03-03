@@ -21,8 +21,13 @@
   "devDependencies": {
     "@rodneylab/parsedown": "link:pkg",
     "husky": "^9.1.7",
-    "prettier": "^3.5.2",
-    "vitest": "^3.0.6"
+    "prettier": "^3.5.3",
+    "vitest": "^3.0.7"
   },
-  "type": "module"
+  "type": "module",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
 }
