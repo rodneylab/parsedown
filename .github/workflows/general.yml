@@ -113,3 +113,10 @@ jobs:
           files: ./target/debug/lcov
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Machete
+        uses: bnjbvr/cargo-machete@b54422fa3319b3cac180f6030b663fe57af51635 # v0.8.0
