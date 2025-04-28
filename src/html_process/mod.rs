@@ -39,7 +39,7 @@ use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 use html5ever::{
     driver,
     interface::tree_builder::{AppendNode, NodeOrText, TreeSink},
-    local_name, namespace_url, ns,
+    local_name, ns,
     serialize::{serialize, SerializeOpts},
     tendril::{format_tendril, StrTendril, TendrilSink},
     Attribute, QualName,
