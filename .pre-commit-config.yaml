@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.6.0
+    rev: v4.7.0
     hooks:
       - id: commitizen
         stages:
@@ -12,7 +12,7 @@ repos:
       - id: cargo-check
       - id: clippy
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.3
+    rev: v8.25.1
     hooks:
       - id: gitleaks
   - repo: https://github.com/google/yamlfmt
@@ -36,6 +36,6 @@ repos:
       - id: cargo-deny
         args: ["--all-features", "check"]
   - repo: https://github.com/crate-ci/typos
-    rev: v1.31.1
+    rev: v1.32.0
     hooks:
       - id: typos
