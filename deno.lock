@@ -1,18 +1,18 @@
 {
-  "version": "4",
+  "version": "5",
   "specifiers": {
-    "jsr:@std/assert@^1.0.11": "1.0.11",
-    "jsr:@std/internal@^1.0.5": "1.0.5"
+    "jsr:@std/assert@^1.0.13": "1.0.13",
+    "jsr:@std/internal@^1.0.6": "1.0.7"
   },
   "jsr": {
-    "@std/assert@1.0.11": {
-      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
+    "@std/assert@1.0.13": {
+      "integrity": "ae0d31e41919b12c656c742b22522c32fb26ed0cba32975cb0de2a273cb68b29",
       "dependencies": [
         "jsr:@std/internal"
       ]
     },
-    "@std/internal@1.0.5": {
-      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
+    "@std/internal@1.0.7": {
+      "integrity": "39eeb5265190a7bc5d5591c9ff019490bd1f2c3907c044a11b0d545796158a0f"
     }
   },
   "remote": {
@@ -96,13 +96,13 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/assert@^1.0.11"
+      "jsr:@std/assert@^1.0.13"
     ],
     "packageJson": {
       "dependencies": [
         "npm:husky@^9.1.7",
         "npm:prettier@^3.5.3",
-        "npm:vitest@^3.1.2"
+        "npm:vitest@^3.1.3"
       ]
     }
   }
