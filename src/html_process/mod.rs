@@ -313,6 +313,7 @@ impl<'a> Builder<'a> {
             driver::ParseOpts::default(),
             QualName::new(None, ns!(html), local_name!("div")),
             vec![],
+            false,
         )
     }
 }
