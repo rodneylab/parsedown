@@ -20,7 +20,7 @@ repos:
     hooks:
       - id: yamlfmt
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
         args:
@@ -36,6 +36,6 @@ repos:
       - id: cargo-deny
         args: ["--all-features", "check"]
   - repo: https://github.com/crate-ci/typos
-    rev: v1.34.0
+    rev: v1.35.3
     hooks:
       - id: typos
