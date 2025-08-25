@@ -32,5 +32,5 @@ serde = { version = "1.0.219", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.2"
 thiserror = "2.0.12"
-url = "2.5.4"
+url = "2.5.7"
 wasm-bindgen = { version = "=0.2.100", features = ["serde-serialize"] }
