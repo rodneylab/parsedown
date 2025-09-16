@@ -28,9 +28,9 @@ mrml = { version = "5.0.0", features = ["parse", "render"], default-features = f
 nom = { version = "8.0.0", features = ["alloc"] }
 pulldown-cmark = "0.13.0"
 pulldown-cmark-escape = "0.11.0"
-serde = { version = "1.0.219", features = ["derive"] }
+serde = { version = "1.0.225", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.2"
-thiserror = "2.0.12"
-url = "2.5.4"
+thiserror = "2.0.16"
+url = "2.5.7"
 wasm-bindgen = { version = "=0.2.100", features = ["serde-serialize"] }
