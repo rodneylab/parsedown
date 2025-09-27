@@ -12,25 +12,25 @@ description = "Markdown processing"
 [lib]
 crate-type = ["cdylib"]
 
-[profile.release]
-codegen-units = 1
-incremental = true
-lto = true
-opt-level = "z"
-
 [dependencies]
 aho-corasick = "1.1.3"
 deunicode = "1.6.2"
 getrandom = { version = "0.3.3", features = ["wasm_js"] }
 html5ever = "0.35.0"
-js-sys = "0.3.77"
+js-sys = "0.3.79"
 mrml = { version = "5.0.0", features = ["parse", "render"], default-features = false }
 nom = { version = "8.0.0", features = ["alloc"] }
 pulldown-cmark = "0.13.0"
 pulldown-cmark-escape = "0.11.0"
-serde = { version = "1.0.225", features = ["derive"] }
+serde = { version = "1.0.227", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.2"
 thiserror = "2.0.16"
 url = "2.5.7"
-wasm-bindgen = { version = "=0.2.100", features = ["serde-serialize"] }
+wasm-bindgen = { version = "=0.2.102", features = ["serde-serialize"] }
+
+[profile.release]
+codegen-units = 1
+incremental = true
+lto = true
+opt-level = "z"
