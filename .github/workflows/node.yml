@@ -26,7 +26,7 @@ jobs:
         run: pnpm install
       - name: Check Format
         run: pnpm run check:formatting
-      - uses: dtolnay/rust-toolchain@4305c38b25d97ef35a8ad1f985ccf2d2242004f2 # stable
+      - uses: dtolnay/rust-toolchain@5d458579430fc14a04a08a1e7d3694f545e91ce6 # stable
       - name: Run tests
         run: cargo install wasm-pack
       - name: Build WASM
