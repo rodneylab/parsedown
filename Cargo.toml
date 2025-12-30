@@ -1,0 +1,24 @@
+[package]
+name = "rust-ci-conf"
+version = "0.1.0"
+edition = "2024"
+license = "BSD-3-Clause"
+repository = "https://github.com/rodneylab/rust-ci-conf"
+# Rust 2024 edition requires Rust 1.85.0
+rust-version = "1.85.0"
+description = "Rust CI config"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[lints.clippy]
+clone_on_ref_ptr = "deny"
+empty_drop = "deny"
+exit = "deny"
+filetype_is_file = "deny"
+get_unwrap = "deny"
+rc_buffer = "deny"
+rc_mutex = "deny"
+rest_pat_in_fully_bound_structs = "deny"
+unnecessary_safety_comment = "deny"
