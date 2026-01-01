@@ -2,11 +2,11 @@
 name = "parsedown"
 version = "1.4.3"
 authors = ["Rodney Johnson <ask@rodneylab.com>"]
-edition = "2021"
+edition = "2024"
 license = "BSD-3-Clause"
 repository = "https://github.com/rodneylab/parsedown"
 # wasm-bindgen v.0.2.93 requires rust 1.76
-rust-version = "1.76"
+rust-version = "1.85"
 description = "Markdown processing"
 
 [lib]
@@ -15,10 +15,10 @@ crate-type = ["cdylib"]
 [dependencies]
 aho-corasick = "1.1.4"
 deunicode = "1.6.2"
-getrandom = { version = "0.3.3", features = ["wasm_js"] }
+getrandom = { version = "0.3.4", features = ["wasm_js"] }
 html5ever = "0.35.0"
-js-sys = "0.3.79"
-mrml = { version = "5.0.0", features = ["parse", "render"], default-features = false }
+js-sys = "0.3.82"
+mrml = { version = "5.1.0", features = ["parse", "render"], default-features = false }
 nom = { version = "8.0.0", features = ["alloc"] }
 pulldown-cmark = "0.13.0"
 pulldown-cmark-escape = "0.11.0"
@@ -27,7 +27,7 @@ serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.2"
 thiserror = "2.0.17"
 url = "2.5.7"
-wasm-bindgen = { version = "=0.2.102", features = ["serde-serialize"] }
+wasm-bindgen = { version = "=0.2.105", features = ["serde-serialize"] }
 
 [profile.release]
 codegen-units = 1
