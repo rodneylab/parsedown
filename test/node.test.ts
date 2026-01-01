@@ -91,7 +91,7 @@ Example Link (https://example.com/)
 
 test("it parses mjml to html", () => {
   // arrange
-  const mjml = "<mjml></mjml>";
+  const mjml = '<mjml lang="en-GB"></mjml>';
 
   // act
   const html = mjmlToHtml(mjml);
@@ -99,7 +99,7 @@ test("it parses mjml to html", () => {
   // assert
   assert(typeof mjmlToHtml === "function");
   expect(html).toBe(
-    `<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    `<!doctype html><html lang="en-GB" dir="auto" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
 #outlook a { padding: 0; }
 body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }

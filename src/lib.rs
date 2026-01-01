@@ -7,13 +7,13 @@ mod url_utility;
 mod utilities;
 
 use serde::{Deserialize, Serialize};
-use wasm_bindgen::{prelude::*, JsValue};
+use wasm_bindgen::{JsValue, prelude::*};
 
 use crate::{
     html_process::process_html,
     markdown::{
-        parse_markdown_to_html, parse_markdown_to_plaintext, Heading, ParseMarkdownOptions,
-        TextStatistics,
+        Heading, ParseMarkdownOptions, TextStatistics, parse_markdown_to_html,
+        parse_markdown_to_plaintext,
     },
 };
 
@@ -241,9 +241,9 @@ Link: [Example site](https://example.com).
 
     #[test]
     fn test_mjml_to_html() {
-        let mjml = r"<mjml></mjml>";
+        let mjml = r#"<mjml lang="en-GB"></mjml>"#;
         let result = mjml_to_html(mjml);
-        let expected = r#"<!doctype html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+        let expected = r#"<!doctype html><html lang="en-GB" dir="auto" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head><title></title><!--[if !mso]><!--><meta http-equiv="X-UA-Compatible" content="IE=edge"><!--<![endif]--><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
 #outlook a { padding: 0; }
 body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }

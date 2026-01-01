@@ -17,13 +17,13 @@ use std::{
 };
 
 use html5ever::{
+    Attribute, ExpandedName, QualName,
     interface::tree_builder::{self, ElementFlags, NodeOrText, QuirksMode, TreeSink},
     serialize::{
         Serialize, Serializer,
         TraversalScope::{self, ChildrenOnly, IncludeNode},
     },
     tendril::StrTendril,
-    Attribute, ExpandedName, QualName,
 };
 
 #[derive(Debug)]

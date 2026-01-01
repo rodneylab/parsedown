@@ -5,16 +5,16 @@ use std::io::{self, Cursor};
 
 use deunicode::deunicode;
 use pulldown_cmark::{
-    html, CowStr,
+    CowStr,
     Event::{self, Code, End, InlineHtml, SoftBreak, Start, Text},
-    Options, Parser, Tag, TagEnd,
+    Options, Parser, Tag, TagEnd, html,
 };
 use pulldown_cmark_escape::StrWrite;
 use serde::Serialize;
 use textwrap::wrap;
 
 use crate::{
-    inline_html::{parse_node as parse_inline_html_node, InlineHTMLTagType},
+    inline_html::{InlineHTMLTagType, parse_node as parse_inline_html_node},
     url_utility::relative_url,
     utilities::stack::Stack,
 };
@@ -23,11 +23,7 @@ use crate::{
 #[allow(clippy::cast_possible_truncation, clippy::cast_sign_loss)]
 fn reading_time_from_words(words: u32) -> u32 {
     let result = (f64::from(words) / 180.0).round();
-    if result > 0.0 {
-        result as u32
-    } else {
-        1
-    }
+    if result > 0.0 { result as u32 } else { 1 }
 }
 
 /// Emoji are not included in word count and hyphenated, compound words (half-time) are one word

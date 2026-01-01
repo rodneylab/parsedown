@@ -1,11 +1,11 @@
 use nom::{
+    IResult, Parser,
     branch::alt,
     bytes::complete::{is_not, tag},
     character::complete::{alphanumeric1, multispace0},
     combinator::recognize,
     multi::many1_count,
     sequence::{delimited, pair},
-    IResult, Parser,
 };
 
 #[derive(Debug, PartialEq, Eq, Hash)]
@@ -61,8 +61,8 @@ pub fn parse_node(html_node: &str) -> Option<InlineHTMLTagType> {
 #[cfg(test)]
 mod tests {
     use super::{
-        parse_closing_html_tag, parse_html_tag_content, parse_node, parse_opening_html_tag,
-        InlineHTMLTagType,
+        InlineHTMLTagType, parse_closing_html_tag, parse_html_tag_content, parse_node,
+        parse_opening_html_tag,
     };
 
     #[test]

@@ -37,12 +37,11 @@ use std::{
 use aho_corasick::AhoCorasickBuilder;
 use dom::{Handle, Node, NodeData, RcDom, SerializableHandle};
 use html5ever::{
-    driver,
+    Attribute, QualName, driver,
     interface::tree_builder::{AppendNode, NodeOrText, TreeSink},
     local_name, ns,
-    serialize::{serialize, SerializeOpts},
-    tendril::{format_tendril, StrTendril, TendrilSink},
-    Attribute, QualName,
+    serialize::{SerializeOpts, serialize},
+    tendril::{StrTendril, TendrilSink, format_tendril},
 };
 
 use crate::url_utility::relative_url;
