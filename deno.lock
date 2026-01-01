@@ -101,8 +101,8 @@
     "packageJson": {
       "dependencies": [
         "npm:husky@^9.1.7",
-        "npm:prettier@^3.6.2",
-        "npm:vitest@^3.2.4"
+        "npm:prettier@^3.7.4",
+        "npm:vitest@^4.0.16"
       ]
     }
   }
