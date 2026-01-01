@@ -1,6 +1,6 @@
 use crate::markdown::{
-    parse_markdown_to_html, parse_markdown_to_plaintext, reading_time_from_words, slugified_title,
-    words, ParseMarkdownOptions,
+    ParseMarkdownOptions, parse_markdown_to_html, parse_markdown_to_plaintext,
+    reading_time_from_words, slugified_title, words,
 };
 
 #[test]

@@ -1,4 +1,4 @@
-use crate::html_process::{process_html, relative_url, Builder};
+use crate::html_process::{Builder, process_html, relative_url};
 
 #[test]
 fn test_builder_process() {
