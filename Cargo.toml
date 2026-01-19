@@ -19,7 +19,7 @@ crate-type = ["cdylib"]
 aho-corasick = "1.1.4"
 deunicode = "1.6.2"
 getrandom = { version = "0.3.4", features = ["wasm_js"] }
-html5ever = "0.35.0"
+html5ever = "0.37.1"
 js-sys = "0.3.82"
 mrml = { version = "5.1.0", features = ["parse", "render"], default-features = false }
 nom = { version = "8.0.0", features = ["alloc"] }
