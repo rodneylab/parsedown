@@ -9,6 +9,9 @@ repository = "https://github.com/rodneylab/parsedown"
 rust-version = "1.85"
 description = "Markdown processing"
 
+[package.metadata.cargo-machete]
+ignored = ["getrandom", "js-sys"]
+
 [lib]
 crate-type = ["cdylib"]
 
@@ -25,9 +28,8 @@ pulldown-cmark-escape = "0.11.0"
 serde = { version = "1.0.228", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 textwrap = "0.16.2"
-thiserror = "2.0.17"
-url = "2.5.7"
-wasm-bindgen = { version = "=0.2.105", features = ["serde-serialize"] }
+url = "2.5.8"
+wasm-bindgen = { version = "=0.2.106", features = ["serde-serialize"] }
 
 [profile.release]
 codegen-units = 1
