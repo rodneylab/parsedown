@@ -57,8 +57,7 @@ fn search_html_highlight_requested_term() {
         r"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p>",
         None,
         Some("apple"),
-    )
-    .to_string();
+    );
     let expected = r#"<h2>Heading</h2><p>Nobody likes maple in their <mark id="search-match">apple</mark> flavoured Sn<mark>apple</mark>. <mark>APPLE</mark></p><p>Paragraph with no matches</p><p>Paragraph which mentions <mark>apple</mark>s again</p>"#;
     assert_eq!(result, expected);
 }
@@ -69,8 +68,7 @@ fn search_html_highlight_requested_nested_term() {
         r"<h2>Heading</h2><section><div><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p></div></section>",
         None,
         Some("apple"),
-    )
-    .to_string();
+    );
     let expected = r#"<h2>Heading</h2><section><div><p>Nobody likes maple in their <mark id="search-match">apple</mark> flavoured Sn<mark>apple</mark>. <mark>APPLE</mark></p><p>Paragraph with no matches</p><p>Paragraph which mentions <mark>apple</mark>s again</p></div></section>"#;
     assert_eq!(result, expected);
 }
@@ -81,8 +79,7 @@ fn search_html_matches_on_multiple_terms() {
         r"<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p><p>Paragraph with no matches</p><p>Paragraph which mentions apples again</p>",
         None,
         Some("apple flavour"),
-    )
-    .to_string();
+    );
     let expected = r#"<h2>Heading</h2><p>Nobody likes maple in their <mark id="search-match">apple</mark> <mark>flavour</mark>ed Sn<mark>apple</mark>. <mark>APPLE</mark></p><p>Paragraph with no matches</p><p>Paragraph which mentions <mark>apple</mark>s again</p>"#;
     assert_eq!(result, expected);
 }
@@ -93,8 +90,7 @@ fn search_html_highlight_does_nothing_when_there_are_no_matches() {
         "<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p>",
         None,
         Some("nonsense"),
-    )
-    .to_string();
+    );
     let expected =
         "<h2>Heading</h2><p>Nobody likes maple in their apple flavoured Snapple. APPLE</p>";
     assert_eq!(result, expected);
