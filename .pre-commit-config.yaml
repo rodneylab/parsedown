@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.11.3
+    rev: v4.13.8
     hooks:
       - id: commitizen
         stages:
@@ -36,6 +36,6 @@ repos:
       - id: cargo-deny
         args: ["--all-features", "check"]
   - repo: https://github.com/crate-ci/typos
-    rev: v1.42.0
+    rev: v1.43.5
     hooks:
       - id: typos
