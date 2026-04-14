@@ -266,7 +266,7 @@ p { display: block; margin: 13px 0; }
 .mj-outlook-group-fix { width:100% !important; }
 </style>
 <![endif]-->
-<style type="text/css"></style></head><body></body></html>"#;
+</head><body></body></html>"#;
         assert_eq!(result, expected);
     }
 }
