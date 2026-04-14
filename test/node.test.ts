@@ -15,7 +15,10 @@ test("it parses markdown to html", async () => {
 `;
 
   // act
-  const { errors, html, headings, statistics } = (await markdownToHtml(markdown, {}))!;
+  const { errors, html, headings, statistics } = (await markdownToHtml(
+    markdown,
+    {},
+  ))!;
 
   // assert
   assert(typeof markdownToHtml === "function");
