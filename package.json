@@ -1,18 +1,16 @@
 {
   "name": "root",
-  "collaborators": [
-    "Rodney Johnson <ask@rodneylab.com>"
-  ],
-  "description": "Markdown processing",
   "version": "1.4.3",
+  "description": "Markdown processing",
+  "keywords": [],
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
     "url": "https://github.com/rodneylab/parsedown"
   },
-  "keywords": [],
+  "type": "module",
   "scripts": {
-    "build": "RUSTFLAGS='--cfg getrandom_backend=\"wasm_js\"' wasm-pack build --target nodejs --scope rodneylab",
+    "build": "wasm-pack build --target nodejs --scope rodneylab",
     "format": "prettier --write './**/*.ts'",
     "check:formatting": "prettier --check './**/*.ts'",
     "test": "vitest run",
@@ -21,13 +19,15 @@
   "devDependencies": {
     "@rodneylab/parsedown": "link:pkg",
     "husky": "^9.1.7",
-    "prettier": "^3.8.1",
-    "vitest": "^4.0.18"
+    "prettier": "^3.8.2",
+    "vitest": "^4.1.4"
   },
-  "type": "module",
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
     ]
-  }
+  },
+  "collaborators": [
+    "Rodney Johnson <ask@rodneylab.com>"
+  ]
 }
