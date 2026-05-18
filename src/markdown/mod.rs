@@ -117,10 +117,8 @@ pub fn parse_markdown_to_html(
                 current_id_fragments.push_str(value);
             }
         }
-        Event::Code(value) => {
-            if parsing_heading {
-                current_id_fragments.push_str(value);
-            }
+        Event::Code(value) if parsing_heading => {
+            current_id_fragments.push_str(value);
         }
         Event::End(TagEnd::Heading(_heading_level)) => {
             let heading = &current_id_fragments;
