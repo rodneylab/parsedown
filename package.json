@@ -20,7 +20,7 @@
     "@rodneylab/parsedown": "link:pkg",
     "husky": "^9.1.7",
     "prettier": "^3.8.3",
-    "vitest": "^4.1.6"
+    "vitest": "^4.1.9"
   },
   "collaborators": [
     "Rodney Johnson <ask@rodneylab.com>"
