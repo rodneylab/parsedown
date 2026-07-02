@@ -19,7 +19,7 @@
   "devDependencies": {
     "@rodneylab/parsedown": "link:pkg",
     "husky": "^9.1.7",
-    "prettier": "^3.8.3",
+    "prettier": "^3.9.4",
     "vitest": "^4.1.6"
   },
   "collaborators": [
